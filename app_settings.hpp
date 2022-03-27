@@ -1,0 +1,43 @@
+#pragma once
+
+#include <chrono>
+#include <set>
+#include <string>
+
+#include <wx/event.h>
+
+#include <cereal/access.hpp>
+
+#include "settings_observer.hpp"
+
+namespace fons
+{
+    class app_settings : public wxEvtHandler
+    {
+      public:
+        app_settings();
+        ~app_settings();
+
+        void subscribe(settings_observer *observer);
+        void unsubscribe(settings_observer *observer);
+
+        void on_repo_select(wxCommandEvent &eventData);
+        void on_repo_found(wxCommandEvent &eventData);
+
+        std::string active_repo;
+        std::set<std::string> repos;
+        std::chrono::time_point<std::chrono::system_clock> last_repo_scan_time;
+
+        std::vector<settings_observer *> observers;
+
+        friend class cereal::access;
+
+        template <class Archive>
+        void serialize(Archive &archive);
+
+      private:
+        void load_settings();
+        void save_settings();
+        void verify_settings();
+    };
+} // namespace fons

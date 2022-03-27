@@ -1,0 +1,9 @@
+﻿---
+BasedOnStyle: Microsoft
+BreakBeforeBraces: Allman
+AlwaysBreakTemplateDeclarations: 'Yes'
+ColumnLimit: '140'
+CompactNamespaces: 'true'
+NamespaceIndentation: All
+
+...
