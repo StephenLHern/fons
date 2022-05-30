@@ -43,10 +43,13 @@ namespace fons
         {
             std::scoped_lock lock(cmd_queue_mutex);
 
-            for (auto &to_cancel : cmd_queue | std::views::filter(match_id))
+            auto matched_cmds = cmd_queue | std::views::filter(match_id);
+
+            for (const auto &to_cancel = std::ranges::begin(matched_cmds);
+                !matched_cmds.empty() && to_cancel != std::ranges::end(matched_cmds);)
             {
-                to_cancel.cmd->status = common::cmd_status::cancelled;
-                cmd_queue.erase(std::remove(cmd_queue.begin(), cmd_queue.end(), to_cancel), cmd_queue.end());
+                to_cancel->cmd->status = common::cmd_status::cancelled;
+                cmd_queue.erase(std::remove(cmd_queue.begin(), cmd_queue.end(), *to_cancel), cmd_queue.end());
             }
         }
 
