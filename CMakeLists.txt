@@ -1,102 +1,28 @@
-﻿cmake_minimum_required (VERSION 3.15)
+﻿############################################################################################################################################
+# Fons Application Cmake
+############################################################################################################################################
+
+cmake_minimum_required (VERSION 3.15)
 
 project ("Fons")
-
-# Start Temporary wxWidgets Manual Library Link
-# This will no longer be required when vcpkg wxWidgets library is patched to find these targets automatically
-
-if(CMAKE_BUILD_TYPE MATCHES "64")
-set(WINARCH x64)
-else()
-set(WINARCH x86)
-endif()
-
-set(libtype u)
-unset(arch_suffix)
-unset(path_prefix)
-set(build_suffix -rel)
-
-if(CMAKE_BUILD_TYPE MATCHES "^(Debug|RelWithDebInfo)$")
-    set(libtype ud)
-    set(path_prefix debug)
-    set(build_suffix -dbg)
-
-    add_definitions(-D_DEBUG)
-endif()
-
-set(build_suffix_rel -rel)
-set(build_suffix_dbg -dbg)
-
-if(VCPKG_TARGET_TRIPLET MATCHES -static)
-    set(arch_suffix  -static)
-
-    set(build_suffix_rel -static-rel)
-    set(build_suffix_dbg -static-dbg)
-
-    set(build_suffix -static${build_suffix})
-else()
-    add_definitions(-DWXUSINGDLL)
-endif()
-
-add_definitions(-D_UNICODE -DUNICODE -DwxUSE_GUI=1 -D__WXMSW__)
-
-set(common_prefix    ${_VCPKG_INSTALLED_DIR}/${WINARCH}-windows${arch_suffix})
-set(dbg_prefix       ${_VCPKG_INSTALLED_DIR}/${WINARCH}-windows${arch_suffix}/debug)
-set(installed_prefix ${_VCPKG_INSTALLED_DIR}/${WINARCH}-windows${arch_suffix}/${path_prefix})
-
-include_directories(${installed_prefix}/lib/msw${libtype})
-include_directories(${common_prefix}/include)
-set(wxWidgets_LIB_DIR ${installed_prefix}/lib)
-set(wxWidgets_LIBRARIES
-    ${wxWidgets_LIB_DIR}/wxbase31${libtype}_net.lib
-    ${wxWidgets_LIB_DIR}/wxbase31${libtype}_xml.lib
-    ${wxWidgets_LIB_DIR}/wxmsw31${libtype}_core.lib
-    ${wxWidgets_LIB_DIR}/wxmsw31${libtype}_gl.lib
-    ${wxWidgets_LIB_DIR}/wxmsw31${libtype}_xrc.lib
-    ${wxWidgets_LIB_DIR}/wxmsw31${libtype}_html.lib
-    ${wxWidgets_LIB_DIR}/wxmsw31${libtype}_stc.lib
-    ${wxWidgets_LIB_DIR}/wxbase31${libtype}.lib
-    winmm comctl32 oleacc rpcrt4 shlwapi version wsock32 opengl32
-)
-
-if(EXISTS ${wxWidgets_LIB_DIR}/wxregex${libtype}.lib)
-    list(APPEND wxWidgets_LIBRARIES ${wxWidgets_LIB_DIR}/wxregex${libtype}.lib)
-endif()
-
-if(VCPKG_TARGET_TRIPLET MATCHES -static)
-    unset(deb_suffix)
-    if(CMAKE_BUILD_TYPE MATCHES "^(Debug|RelWithDebInfo)$")
-        set(deb_suffix d)
-    endif()
-
-    foreach(lib_name libpng jpeg lzma tiff libexpat wxscintilla)
-        file(
-            GLOB lib_file
-            ${wxWidgets_LIB_DIR}/${lib_name}*.lib
-        )
-
-        if(lib_file)
-            list(APPEND wxWidgets_LIBRARIES ${lib_file})
-        endif()
-    endforeach()
-endif()
-
-set(WXRC ${common_prefix}/tools/wxwidgets/wxrc.exe)
-
-set(ENV{PATH} "${dbg_prefix}/bin;${common_prefix}/bin;$ENV{PATH}")
-
-# End Temporary wxWidgets Manual Library Link
 
 set(wxWidgets_CONFIGURATION mswu)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(unofficial-wxwidgets REQUIRED)
-find_package(GTest REQUIRED)
+############################################################################################################################################
+# Find Required Build Dependencies
+############################################################################################################################################
+
+find_package(wxWidgets REQUIRED COMPONENTS core base stc OPTIONAL_COMPONENTS net)
 find_package(cereal REQUIRED)
 find_path(LIBGIT2_INCLUDE_DIR git2.h REQUIRED)
 find_library(LIBGIT2_LIBRARY git2 REQUIRED)
+
+############################################################################################################################################
+# Copied Files Required at Fons Runtime
+############################################################################################################################################
 
 # License Info
 configure_file("gui/license_notices.txt" "license_notices.txt" COPYONLY)
@@ -135,7 +61,53 @@ configure_file("gui/images/win-restore-active.png" "images/win-restore-active.pn
 configure_file("gui/images/win-restore-inactive.png" "images/win-restore-inactive.png" COPYONLY)
 configure_file("gui/images/win-restore-active.png" "images/win-restore-selected.png" COPYONLY)
 
-add_executable (Fons WIN32 "app_main.cpp" "GUI/frame_home.cpp" "GUI/frame_home.hpp"  "git/gitlib_manager.hpp" "common/command.hpp" "common/command.cpp" "app_main.hpp"  "git/commands/find_repos.hpp" "git/commands/find_repos.cpp"  "app_settings.cpp" "app_settings.hpp" "app_cmd_manager.hpp" "app_cmd_manager.cpp" "gui/sidebar_button.hpp" "gui/sidebar_button.cpp" "gui/contexts/context_repo.hpp" "gui/contexts/context_repo.cpp" "gui/repo_selector.cpp" "gui/search_completer.hpp" "gui/search_completer.cpp" "settings_observer.hpp" "git/commands/find_branches.cpp" "git/commands/find_branches.hpp" "gui/branch_selector.cpp" "gui/branch_selector.hpp" "git/git_mediator.cpp" "git/git_mediator.hpp" "git/git_observer.hpp" "git/commands/status.hpp" "git/commands/status.cpp"  "git/unique_libgit_ptr.hpp" "gui/contexts/context_branches.cpp" "gui/contexts/context_branches.hpp" "gui/contexts/context_commit.cpp" "gui/contexts/context_commit.hpp" "gui/contexts/context_merge.cpp" "gui/contexts/context_merge.hpp" "gui/contexts/context_changes.cpp" "gui/contexts/context_changes.hpp" "gui/contexts/context_remote.cpp" "gui/contexts/context_remote.hpp" "gui/contexts/context_settings.cpp" "gui/contexts/context_settings.hpp" "common/cmd_observer.hpp"  "common/optional_binary.hpp" "common/optional_json.hpp" "common/optional_nvp.hpp" "gui/everything_but_the_title_bar.cpp" "gui/everything_but_the_title_bar.hpp"    "git/commands/revwalk.hpp" "git/commands/revwalk.cpp" "common/cmd_event.hpp" "common/cmd_event.cpp" "gui/fons_wx.h" "common/cmd_instance.hpp" "git/commit.hpp" "gui/ebt_window_control_button.cpp" "gui/ebt_window_control_button.hpp" "gui/contexts/context_info.hpp" "gui/contexts/context_info.cpp" "app_icon.rc")
+############################################################################################################################################
+# Establish Fons Executable
+############################################################################################################################################
+
+add_executable (Fons WIN32 
+"app_cmd_manager.cpp"
+"app_icon.rc"
+"app_main.cpp"
+"app_settings.cpp"
+"common/cmd_event.cpp"
+"common/command.cpp"
+"git/commands/find_branches.cpp"
+"git/commands/find_repos.cpp"
+"git/commands/revwalk.cpp"
+"git/commands/status.cpp"
+"git/git_mediator.cpp"
+"gui/branch_selector.cpp"
+"gui/contexts/context_branches.cpp"
+"gui/contexts/context_changes.cpp"
+"gui/contexts/context_commit.cpp"
+"gui/contexts/context_info.cpp"
+"gui/contexts/context_merge.cpp"
+"gui/contexts/context_remote.cpp"
+"gui/contexts/context_repo.cpp"
+"gui/contexts/context_settings.cpp"
+"gui/ebt_window_control_button.cpp"
+"gui/everything_but_the_title_bar.cpp"
+"gui/fons_wx.h"
+"gui/frame_home.cpp"
+"gui/repo_selector.cpp"
+"gui/search_completer.cpp"
+"gui/sidebar_button.cpp"
+)
+
+############################################################################################################################################
+# Include Directories
+############################################################################################################################################
+
+set_target_properties(Fons PROPERTIES INTERFACE_SYSTEM_INCLUDE_DIRECTORIES $<TARGET_PROPERTY:dep,INTERFACE_INCLUDE_DIRECTORIES>)
+target_include_directories(Fons SYSTEM PRIVATE ${LIBGIT2_INCLUDE_DIR})
+target_include_directories(Fons SYSTEM PRIVATE ${wxWidgets_INCLUDE_DIRS})
+target_include_directories(Fons SYSTEM PRIVATE ${cereal_INCLUDE_DIRS})
+target_include_directories(Fons PRIVATE ".")
+
+############################################################################################################################################
+# Compilation Settings
+############################################################################################################################################
 
 # Enables as many errors, validations as possible for the compiler being used
 if (MSVC)
@@ -150,16 +122,26 @@ else()
 target_compile_options(Fons PRIVATE -Wall -Wextra -Wpedantic -Werror -fsanitize=undefined,address)
 endif()
 
-target_include_directories(Fons SYSTEM PRIVATE ${LIBGIT2_INCLUDE_DIR})
-target_include_directories(Fons SYSTEM PRIVATE ${wxWidgets_INCLUDE_DIRS})
-target_include_directories(Fons SYSTEM PRIVATE ${cereal_INCLUDE_DIRS})
+target_compile_definitions(Fons PRIVATE ${wxWidgets_DEFINITIONS} "$<$<CONFIG:DEBUG>:${wxWidgets_DEFINITIONS_DEBUG}>")
 
-target_include_directories(Fons PRIVATE ".")
-
-set_target_properties(Fons PROPERTIES INTERFACE_SYSTEM_INCLUDE_DIRECTORIES $<TARGET_PROPERTY:dep,INTERFACE_INCLUDE_DIRECTORIES>)
+############################################################################################################################################
+# Linked Libraries
+############################################################################################################################################
 
 target_link_libraries(Fons PRIVATE ${LIBGIT2_LIBRARY})
-target_link_libraries(Fons PRIVATE wx::wxgl PRIVATE wx::wxqa PRIVATE wx::wxadv PRIVATE wx::wxaui)
-#target_link_libraries(Fons PRIVATE GTest::gmock GTEST::gtest GTEST::gmock_main GTEST::gtest_main)
 target_link_libraries(Fons PRIVATE ${wxWidgets_LIBRARIES})
-target_link_libraries(Fons PRIVATE cereal)
+
+############################################################################################################################################
+# WxWidgets Resource Compiler
+############################################################################################################################################
+
+option(USE_WXRC "Use the wxrc resource compiler" ON)
+if(USE_WXRC)
+    execute_process(
+        COMMAND "${wxWidgets_wxrc_EXECUTABLE}" --help
+        RESULTS_VARIABLE error_result
+    )
+    if(error_result)
+        message(FATAL_ERROR "Failed to run wxWidgets_wxrc_EXECUTABLE (${wxWidgets_wxrc_EXECUTABLE})")
+    endif()
+endif()
