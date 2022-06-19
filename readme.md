@@ -63,6 +63,10 @@ Below is a roadmap for the planned scope of the project:
 
 All code developed for fons is available under the MIT license for use in all other pojects, further details are provided in the [license file](license.md).
 
+# Developer Documentation
+
+Documentation for the underlying source code is hosted on Read the Docs, and can be found at [fons.readthedocs.io](https://fons.readthedocs.io).
+
 # Credits
 
 Fons makes use of the following libaries, tools, and resources (listed alphabetically):
