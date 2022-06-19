@@ -65,13 +65,23 @@ All code developed for fons is available under the MIT license for use in all ot
 
 # Credits
 
-Fons makes use of the following libaries, tools, and resources:
+Fons makes use of the following libaries, tools, and resources (listed alphabetically):
 
 * [cereal](https://uscilab.github.io/cereal/)
 * [Cmake](https://cmake.org/)
+* [Doxygen](https://doxygen.nl/)
+* [Github](https://github.com/)
 * [libgit2](https://libgit2.org/)
 * [Octicons](https://github.com/primer/octicons)
+* [ReadTheDocs](https://readthedocs.org/)
+* [Sphinx](https://www.sphinx-doc.org/)
 * [vcpkg](https://vcpkg.io/en/index.html)
 * [wxWidgets](https://www.wxwidgets.org/)
 
 Full license information for these libraries are available at the provided websites, and is also included in the fons application [info page text](gui/license_notices.txt).
+
+Additional Thanks to (listed alphabetically):
+
+* indi, stack exchange code reviews
+* Pavel Boev, cereal-optional code
+* Sy Brand, documentation tutorial for sphinx/doxygen/read the docs
