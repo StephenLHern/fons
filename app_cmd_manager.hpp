@@ -13,6 +13,13 @@ namespace fons
     class app_main;
     class app_settings;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// @class app_cmd_manager
+    /// @brief Centralized manager for internal fons application commands.
+    ///
+    /// The app_cmd_manager class is responsible for creating threads to execute internal fons application commands, provide access to
+    /// queued, executing commands, notify other objects of command completion, and allow cancellation of commands.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     class app_cmd_manager
     {
       public:

@@ -1,0 +1,23 @@
+{
+  "name": "fons",
+  "version-string": "0.0.0",
+  "dependencies": [
+    {
+      "name": "wxwidgets",
+      "version>=": "3.1.5"
+    },
+    {
+      "name": "libgit2",
+      "version>=": "1.4.2"
+    },
+    {
+      "name": "cereal",
+      "version>=": "1.3.1"
+    },
+    {
+      "name": "gtest",
+      "version>=": "1.11.0"
+    }
+  ],
+  "builtin-baseline": "9e8da9bd8aa16fb268ac68f731c44fdef5fec1ab"
+}

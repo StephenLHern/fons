@@ -12,6 +12,14 @@
 
 namespace fons
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// @class app_settings
+    /// @brief Class for reading / writing fons application settings.
+    ///
+    /// The app_settings class is responsible for accessing and storing fons application settings. On construction it reads in currently
+    /// stored application settings from the application settings file, on destruction it writes any changed settings to the application
+    /// settings file.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     class app_settings : public wxEvtHandler
     {
       public:

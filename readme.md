@@ -18,19 +18,19 @@ Below is a roadmap for the planned scope of the project:
 * wxWidgets GUI for browsing repository commits, branches
 * Command manager supporting libgit2, filesystem operations on separate threads from GUI
 * Application settings framework, example setting
+* Doxygen, Sphinx documentation
+* Unit test suite
 
 ### To Do
 
 🔲 Architecture backlog
 
-* Doxygen documentation
-* Unit test suite
 * Installer
 * Create customized controls for branch, repository selection, easy text search
 * Expand Command, Command Manager support for:
     * Blocking commands on specified resources
     * Event signaling command completion, cancellation
-* OSX, Linux testing
+* OSX, Linux builds, testing
 
 🔲 Basic git operation support
 

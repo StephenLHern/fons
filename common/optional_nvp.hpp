@@ -70,7 +70,7 @@ namespace cereal
     /// Makes optional name-value pair
     /// @param name Property name
     /// @param option Property
-    /// @param default_value Default property value
+    /// @param defaultValue Default property value
     /// @return Optional NVP
     template <class T, class TV>
     OptionalNameValuePair<T, TV> make_optional_nvp(const char *name, T &&option, TV &&defaultValue)

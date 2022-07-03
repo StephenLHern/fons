@@ -11,7 +11,11 @@ find_package(Sphinx REQUIRED)
 # Doxygen
 ############################################################################################################################################
 
-set(DOXYGEN_INPUT_DIR ${PROJECT_SOURCE_DIR})
+string(CONCAT TEMP_DOXYGEN_INPUT_DIRS "${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/common ${PROJECT_SOURCE_DIR}/git "
+    "${PROJECT_SOURCE_DIR}/git/commands ${PROJECT_SOURCE_DIR}/gui ${PROJECT_SOURCE_DIR}/gui/contexts ${PROJECT_SOURCE_DIR}/ut "
+    "${PROJECT_SOURCE_DIR}/ut/mocks")
+
+set(DOXYGEN_INPUT_DIR ${TEMP_DOXYGEN_INPUT_DIRS})
 set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doxygen)
 set(DOXYGEN_INDEX_FILE ${DOXYGEN_OUTPUT_DIR}/xml/index.xml)
 set(DOXYFILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
