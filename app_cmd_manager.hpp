@@ -1,12 +1,14 @@
 #pragma once
 
-#include "common/cmd_instance.hpp"
-#include "common/command.hpp"
 #include <atomic>
 #include <condition_variable>
 #include <mutex>
 #include <string>
 #include <vector>
+
+#include "common/cmd_complete_event.hpp"
+#include "common/cmd_instance.hpp"
+#include "common/command.hpp"
 
 namespace fons
 {
@@ -28,6 +30,7 @@ namespace fons
         uint64_t execute(std::shared_ptr<common::command> command);
         void cancel(uint64_t command_id);
         void process_cmds();
+        void on_cmd_complete(cmd_complete_event &eventData);
 
       private:
         app_main *app;

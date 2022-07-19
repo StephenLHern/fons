@@ -9,6 +9,8 @@
 
 namespace fons::git
 {
+    wxDEFINE_EVENT(EVENT_INIT_REPO, wxCommandEvent);
+
     git_mediator::git_mediator(fons::app_settings *bind_settings, fons::app_cmd_manager *bind_cmd_manager)
         : settings(bind_settings), cmd_manager(bind_cmd_manager)
     {
@@ -43,15 +45,12 @@ namespace fons::git
             last_find_repos_cmd = init_repos_cmd;
         }
 
-        auto init_branches_cmd = std::make_shared<fons::git::find_branches>();
-        cmd_manager->execute(init_branches_cmd);
-        last_find_branches_cmd = init_branches_cmd;
-
-        while (init_branches_cmd->status != common::cmd_status::joined)
-            std::this_thread::yield();
-
-        auto init_status_cmd = std::make_shared<fons::git::status>();
-        cmd_manager->execute(init_status_cmd);
+        if (!settings->active_repo.empty())
+        {
+            wxCommandEvent *repo_select_event = new wxCommandEvent(EVENT_INIT_REPO);
+            repo_select_event->SetString(settings->active_repo);
+            wxQueueEvent(dynamic_cast<wxEvtHandler *>(settings), repo_select_event);
+        }
     }
 
     void git_mediator::on_branch_found(wxCommandEvent &eventData)

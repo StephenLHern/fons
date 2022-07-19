@@ -2,9 +2,12 @@
 #include <thread>
 
 #include "app_cmd_manager.hpp"
+#include "app_main.hpp"
 
 namespace fons
 {
+    wxDEFINE_EVENT(EVENT_CMD_COMPLETE, cmd_complete_event);
+
     void app_cmd_manager::init(app_main *bind_app, app_settings *bind_settings)
     {
         app = bind_app;
@@ -46,7 +49,7 @@ namespace fons
             auto matched_cmds = cmd_queue | std::views::filter(match_id);
 
             for (const auto &to_cancel = std::ranges::begin(matched_cmds);
-                !matched_cmds.empty() && to_cancel != std::ranges::end(matched_cmds);)
+                 !matched_cmds.empty() && to_cancel != std::ranges::end(matched_cmds);)
             {
                 to_cancel->cmd->status = common::cmd_status::cancelled;
                 cmd_queue.erase(std::remove(cmd_queue.begin(), cmd_queue.end(), *to_cancel), cmd_queue.end());
@@ -135,8 +138,10 @@ namespace fons
                             active_cmd.cmd->status = common::cmd_status::joined;
                         }
 
-                        for (cmd_observer *current_observer : active_cmd.cmd->observers)
-                            current_observer->on_command_complete(active_cmd.cmd->id());
+                        cmd_complete_event *complete_event = new fons::cmd_complete_event();
+                        complete_event->complete_cmd_id = active_cmd.cmd->id();
+                        complete_event->observers = std::vector<cmd_observer *>(active_cmd.cmd->observers);
+                        wxQueueEvent(dynamic_cast<wxEvtHandler *>(app), complete_event);
                     }
                 }
 
@@ -159,6 +164,12 @@ namespace fons
             active_cmd.cmd->status = common::cmd_status::cancelled;
 
         return active_cmds.empty();
+    }
+
+    void app_cmd_manager::on_cmd_complete(cmd_complete_event &eventData)
+    {
+        for (cmd_observer *current_observer : eventData.observers)
+            current_observer->on_command_complete(eventData.complete_cmd_id);
     }
 
     void app_cmd_manager::cmd_task(uint64_t cmd_id)

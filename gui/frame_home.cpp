@@ -47,7 +47,8 @@ namespace fons::gui
         context_book = new wxSimplebook(main_panel, -1);
         context_book->AddPage(new context_repo(context_book, parent_app->settings, parent_app->git_mediator.value()), "Repository");
         context_book->AddPage(new context_branches(context_book, parent_app->settings, parent_app->git_mediator.value()), "Branches");
-        context_book->AddPage(new context_changes(context_book), "Changes");
+        context_book->AddPage(
+            new context_changes(context_book, parent_app->settings, parent_app->git_mediator.value(), parent_app->cmd_manager), "Changes");
         context_book->AddPage(new context_commit(context_book), "Commit");
         context_book->AddPage(new context_merge(context_book), "Merge");
         context_book->AddPage(new context_remote(context_book), "Remote");

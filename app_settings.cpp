@@ -38,14 +38,19 @@ namespace fons
 
     void app_settings::on_repo_select(wxCommandEvent &eventData)
     {
-        std::string stl_string = std::string(eventData.GetString());
-        std::replace(stl_string.begin(), stl_string.end(), '/', '\\');
-        stl_string += ".git";
+        // When event has been sent from a combo box, filter to the correct path format and only trigger an event if the user has selected a
+        // different repo than was previously active
+        if (eventData.GetEventType() == wxEVT_COMBOBOX)
+        {
+            std::string stl_string = std::string(eventData.GetString());
+            std::replace(stl_string.begin(), stl_string.end(), '/', '\\');
+            stl_string += ".git";
 
-        if (!repos.contains(stl_string) || stl_string == active_repo)
-            return;
+            if (!repos.contains(stl_string) || stl_string == active_repo)
+                return;
 
-        active_repo = stl_string;
+            active_repo = stl_string;
+        }
 
         for (settings_observer *current_observer : observers)
             current_observer->on_repo_select(active_repo);

@@ -23,6 +23,8 @@ namespace fons
 
 namespace fons::git
 {
+    wxDECLARE_EVENT(EVENT_INIT_REPO, wxCommandEvent);
+
     class git_mediator : public wxEvtHandler, settings_observer, cmd_observer
     {
       public:

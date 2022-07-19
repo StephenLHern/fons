@@ -30,8 +30,6 @@ namespace fons
 
         app_settings settings;
         std::optional<git::git_mediator> git_mediator;
-
-      private:
         app_cmd_manager cmd_manager;
     };
 } // namespace fons

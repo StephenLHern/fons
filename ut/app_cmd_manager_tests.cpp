@@ -1,6 +1,7 @@
 ﻿#include <gtest/gtest.h>
 
 #include "app_cmd_manager.hpp"
+#include "mocks/app_main.hpp"
 #include "mocks/app_settings.hpp"
 #include "mocks/mock_cmd.hpp"
 
@@ -11,10 +12,11 @@ namespace fons
       protected:
         fons::app_cmd_manager cmd_manager;
         fons::app_settings settings;
+        fons::app_main app;
 
         void SetUp() override
         {
-            cmd_manager.init(nullptr, nullptr);
+            cmd_manager.init(&app, &settings);
         };
 
         void TearDown() override
