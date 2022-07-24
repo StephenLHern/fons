@@ -4,7 +4,7 @@
 
 #include "gui/fons_wx.h"
 
-namespace fons::common
+namespace fons::events
 {
     class cmd_event;
     wxDECLARE_EVENT(EVENT_COMMAND, cmd_event);
@@ -31,4 +31,4 @@ namespace fons::common
 
         uint64_t parent_cmd_id;
     };
-} // namespace fons::common
+} // namespace fons::events

@@ -12,16 +12,16 @@ namespace fons::git
     wxDECLARE_EVENT(EVENT_REVWALK, revwalk_event);
     const int EVENT_FOUND_COMMIT = 0;
 
-    class revwalk_event : public fons::common::cmd_event
+    class revwalk_event : public fons::events::cmd_event
     {
       public:
-        revwalk_event(wxEventType eventType, int event_id, commit input_commit_data) : fons::common::cmd_event(eventType, event_id)
+        revwalk_event(wxEventType eventType, int event_id, commit input_commit_data) : fons::events::cmd_event(eventType, event_id)
         {
             commit_data = input_commit_data;
         }
 
         // You *must* copy here the data to be transported
-        revwalk_event(const revwalk_event &event) : fons::common::cmd_event(event)
+        revwalk_event(const revwalk_event &event) : fons::events::cmd_event(event)
         {
             commit_data = event.commit_data;
         }

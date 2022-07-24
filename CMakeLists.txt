@@ -73,7 +73,6 @@ add_executable (Fons WIN32
 "app_icon.rc"
 "app_main.cpp"
 "app_settings.cpp"
-"common/cmd_event.cpp"
 "common/command.cpp"
 "git/commands/find_branches.cpp"
 "git/commands/find_repos.cpp"
@@ -96,7 +95,7 @@ add_executable (Fons WIN32
 "gui/repo_selector.cpp"
 "gui/search_completer.cpp"
 "gui/sidebar_button.cpp"
- "git/commands/head_to_workdir.cpp")
+"git/commands/head_to_workdir.cpp")
 
 ############################################################################################################################################
 # Doxygen

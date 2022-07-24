@@ -1,7 +1,7 @@
 #pragma once
 
-#include "cmd_event.hpp"
 #include "cmd_observer.hpp"
+#include "events/cmd_event.hpp"
 #include <atomic>
 #include <vector>
 #include <wx/event.h>
@@ -54,7 +54,7 @@ namespace fons::common
         void unsubscribe(cmd_observer *observer);
 
         template <class EventT, class... EventConstructorArgs>
-        void queue_event(wxEventType event_id = EVENT_COMMAND, EventConstructorArgs &&...args)
+        void queue_event(wxEventType event_id = events::EVENT_COMMAND, EventConstructorArgs &&...args)
         {
             EventT *event_to_queue = new EventT(event_id, std::forward<EventConstructorArgs>(args)...);
             event_to_queue->parent_cmd_id = id();

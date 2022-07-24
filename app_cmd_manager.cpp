@@ -6,7 +6,7 @@
 
 namespace fons
 {
-    wxDEFINE_EVENT(EVENT_CMD_COMPLETE, cmd_complete_event);
+    wxDEFINE_EVENT(events::EVENT_CMD_COMPLETE, events::cmd_complete_event);
 
     void app_cmd_manager::init(app_main *bind_app, app_settings *bind_settings)
     {
@@ -138,10 +138,8 @@ namespace fons
                             active_cmd.cmd->status = common::cmd_status::joined;
                         }
 
-                        cmd_complete_event *complete_event = new fons::cmd_complete_event();
-                        complete_event->complete_cmd_id = active_cmd.cmd->id();
-                        complete_event->observers = std::vector<cmd_observer *>(active_cmd.cmd->observers);
-                        wxQueueEvent(dynamic_cast<wxEvtHandler *>(app), complete_event);
+                        active_cmd.cmd->queue_event<events::cmd_complete_event>(events::EVENT_CMD_COMPLETE, wxID_ANY,
+                                                                                active_cmd.cmd->observers);
                     }
                 }
 
@@ -166,10 +164,10 @@ namespace fons
         return active_cmds.empty();
     }
 
-    void app_cmd_manager::on_cmd_complete(cmd_complete_event &eventData)
+    void app_cmd_manager::on_cmd_complete(events::cmd_complete_event &eventData)
     {
         for (cmd_observer *current_observer : eventData.observers)
-            current_observer->on_command_complete(eventData.complete_cmd_id);
+            current_observer->on_command_complete(eventData.parent_cmd_id);
     }
 
     void app_cmd_manager::cmd_task(uint64_t cmd_id)

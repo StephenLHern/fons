@@ -1,3 +1,5 @@
+#pragma once
+
 namespace fons::git
 {
     class commit

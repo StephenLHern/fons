@@ -90,4 +90,11 @@ namespace fons::git
         delete buffer;
     };
 
+    using unique_str_array_ptr = std::unique_ptr<git_strarray, std::function<void(git_strarray *)>>;
+    static std::function<void(git_strarray *)> free_unique_str_array = [](git_strarray *str_array)
+    {
+        git_strarray_dispose(str_array);
+        delete str_array;
+    };
+
 } // namespace fons::git
