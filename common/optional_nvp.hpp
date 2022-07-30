@@ -1,8 +1,7 @@
+#pragma once
+
 // From Pavel Boev
 // https://github.com/LowCostCustoms/cereal-optional
-
-#ifndef CEREAL_OPTIONAL_OPTIONAL_NVP_HPP
-#define CEREAL_OPTIONAL_OPTIONAL_NVP_HPP
 
 #include "cereal/cereal.hpp"
 
@@ -97,5 +96,3 @@ namespace cereal
 } // namespace cereal
 
 #define CEREAL_OPTIONAL_NVP(T, ...) ::cereal::make_optional_nvp(#T, T, __VA_ARGS__)
-
-#endif // CEREAL_OPTIONAL_OPTIONAL_NVP_HPP

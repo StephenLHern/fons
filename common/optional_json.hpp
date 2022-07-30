@@ -1,8 +1,7 @@
+#pragma once
+
 // From Pavel Boev
 // https://github.com/LowCostCustoms/cereal-optional
-
-#ifndef CEREAL_OPTIONAL_OPTIONAL_JSON_HPP
-#define CEREAL_OPTIONAL_OPTIONAL_JSON_HPP
 
 #include "cereal/archives/json.hpp"
 #include "optional_nvp.hpp"
@@ -62,5 +61,3 @@ namespace cereal
     }
 
 } // namespace cereal
-
-#endif // CEREAL_OPTIONAL_OPTIONAL_JSON_HPP

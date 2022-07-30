@@ -25,11 +25,14 @@ namespace fons::gui
         SetSizerAndFit(file_list_sizer);
     }
 
-    void context_changes::on_command_complete([[maybe_unused]] uint64_t command_id)
+    void context_changes::on_command_complete(uint64_t command_id)
     {
 
         if (!last_head_to_workdir_cmd || command_id != last_head_to_workdir_cmd->id())
             return;
+
+        // Temporarily freeze window drawing while processsing changes
+        Freeze();
 
         DestroyChildren();
         GetSizer()->Clear();
@@ -82,6 +85,9 @@ namespace fons::gui
         }
 
         Layout();
+
+        // Unfreeze window drawing now that all changes have been processed
+        Thaw();
     }
 
     void context_changes::on_repo_select(std::string found_repo)

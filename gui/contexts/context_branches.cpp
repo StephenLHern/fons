@@ -1,8 +1,8 @@
-#include "context_branches.hpp"
-#include "app_settings.hpp"
-#include "git/git_mediator.hpp"
-
 #include <wx/dataview.h>
+
+#include "app_settings.hpp"
+#include "context_branches.hpp"
+#include "git/git_mediator.hpp"
 
 namespace fons::gui
 {

@@ -5,7 +5,7 @@
 #include <wx/event.h>
 
 #include "app_settings.hpp"
-#include "common\command.hpp"
+#include "common/command.hpp"
 
 namespace fons::git
 {

@@ -1,5 +1,4 @@
-#ifndef CEREAL_OPTIONAL_OPTIONAL_BINARY_HPP
-#define CEREAL_OPTIONAL_OPTIONAL_BINARY_HPP
+#pragma once
 
 #include "cereal/archives/binary.hpp"
 #include "optional_nvp.hpp"
@@ -40,5 +39,3 @@ namespace cereal
     }
 
 } // namespace cereal
-
-#endif // CEREAL_OPTIONAL_OPTIONAL_BINARY_HPP

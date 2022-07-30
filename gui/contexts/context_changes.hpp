@@ -1,7 +1,7 @@
 #pragma once
 
-#include "common\cmd_observer.hpp"
-#include "git\git_observer.hpp"
+#include "common/cmd_observer.hpp"
+#include "git/git_observer.hpp"
 
 #include "gui/fons_wx.h"
 
