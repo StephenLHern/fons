@@ -95,7 +95,9 @@ add_executable (Fons WIN32
 "gui/repo_selector.cpp"
 "gui/search_completer.cpp"
 "gui/sidebar_button.cpp"
-"git/commands/head_to_workdir.cpp")
+"git/commands/head_to_workdir.cpp"
+"git/commands/find_remotes.cpp"
+"git/commands/get_config.cpp")
 
 ############################################################################################################################################
 # Doxygen

@@ -3,7 +3,7 @@
 #include <memory>
 #include <wx/event.h>
 
-#include "common\cmd_observer.hpp"
+#include "common/cmd_observer.hpp"
 #include "git_observer.hpp"
 #include "settings_observer.hpp"
 
@@ -12,10 +12,17 @@ namespace fons
     class app_settings;
     class app_cmd_manager;
 
+    namespace events
+    {
+        class git_found_remote_event;
+    }
+
     namespace git
     {
+        class find_remotes;
         class find_repos;
         class find_branches;
+        class get_config;
         class revwalk;
         class revwalk_event;
     } // namespace git
@@ -38,6 +45,7 @@ namespace fons::git
         void on_branch_found(wxCommandEvent &eventData);
         void on_status(wxCommandEvent &eventData);
         void on_commit_found(revwalk_event &eventData);
+        void on_remote_found(events::git_found_remote_event &eventData);
         virtual void on_repo_select(std::string selected_repo) override;
         virtual void on_command_complete(uint64_t command_id) override;
 
@@ -50,6 +58,8 @@ namespace fons::git
         std::weak_ptr<fons::git::find_repos> last_find_repos_cmd;
         std::weak_ptr<fons::git::find_branches> last_find_branches_cmd;
         std::weak_ptr<fons::git::revwalk> last_revwalk_cmd;
+        std::weak_ptr<fons::git::find_remotes> last_find_remotes_cmd;
+        std::weak_ptr<fons::git::get_config> last_get_config_cmd;
 
         std::string cached_active_branch;
     };

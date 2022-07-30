@@ -51,8 +51,10 @@ namespace fons::gui
             new context_changes(context_book, parent_app->settings, parent_app->git_mediator.value(), parent_app->cmd_manager), "Changes");
         context_book->AddPage(new context_commit(context_book), "Commit");
         context_book->AddPage(new context_merge(context_book), "Merge");
-        context_book->AddPage(new context_remote(context_book), "Remote");
-        context_book->AddPage(new context_settings(context_book), "Settings");
+        context_book->AddPage(new context_remote(context_book, parent_app->settings, parent_app->git_mediator.value()), "Remote");
+        context_book->AddPage(
+            new context_settings(context_book, parent_app->settings, parent_app->git_mediator.value(), parent_app->cmd_manager),
+            "Settings");
         context_book->AddPage(new context_info(context_book), "Info");
 
         button_id_to_page_id.insert(std::pair<wxWindowID, size_t>(repo_button->GetId(), 0));

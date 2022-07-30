@@ -2,8 +2,11 @@
 #include "app_cmd_manager.hpp"
 #include "app_settings.hpp"
 
+#include "events/git_found_remote_event.hpp"
 #include "git/commands/find_branches.hpp"
+#include "git/commands/find_remotes.hpp"
 #include "git/commands/find_repos.hpp"
+#include "git/commands/get_config.hpp"
 #include "git/commands/revwalk.hpp"
 #include "git/commands/status.hpp"
 
@@ -67,6 +70,12 @@ namespace fons::git
             current_observer->on_commit_found(eventData.commit_data);
     }
 
+    void git_mediator::on_remote_found(events::git_found_remote_event &eventData)
+    {
+        for (git_observer *current_observer : observers)
+            current_observer->on_remote_found(eventData.remote_name, eventData.remote_url);
+    }
+
     void git_mediator::on_status(wxCommandEvent &eventData)
     {
         std::string active_branch = std::string(eventData.GetString());
@@ -88,18 +97,37 @@ namespace fons::git
     {
         cached_active_branch.clear();
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // A new repository has been selected, so cancel any executing commands operating on the previous repository
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         std::shared_ptr<fons::git::find_branches> lapsed_branch_cmd = last_find_branches_cmd.lock();
         if (lapsed_branch_cmd)
         {
             lapsed_branch_cmd->cancel();
         }
 
+        std::shared_ptr<fons::git::find_remotes> lapsed_remotes_cmd = last_find_remotes_cmd.lock();
+        if (lapsed_remotes_cmd)
+        {
+            lapsed_remotes_cmd->cancel();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Queue new commands to find relevant details about the newly selected repository
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        auto init_remotes_cmd = std::make_shared<fons::git::find_remotes>();
+        cmd_manager->execute(init_remotes_cmd);
+        last_find_remotes_cmd = init_remotes_cmd;
+
         auto init_branches_cmd = std::make_shared<fons::git::find_branches>();
         cmd_manager->execute(init_branches_cmd);
         last_find_branches_cmd = init_branches_cmd;
 
-        while (init_branches_cmd->status != common::cmd_status::joined)
-            std::this_thread::yield();
+        auto init_get_config_cmd = std::make_shared<fons::git::get_config>();
+        cmd_manager->execute(init_get_config_cmd);
+        last_get_config_cmd = init_get_config_cmd;
 
         auto init_status_cmd = std::make_shared<fons::git::status>();
         cmd_manager->execute(init_status_cmd);

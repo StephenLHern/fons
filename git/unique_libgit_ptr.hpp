@@ -82,6 +82,10 @@ namespace fons::git
     using unique_patch_ptr = unique_libgit_ptr<git_patch>;
     using unique_blob_ptr = unique_libgit_ptr<git_blob>;
     using unique_id_ptr = unique_libgit_ptr<git_oid>;
+    using unique_remote_ptr = unique_libgit_ptr<git_remote>;
+    using unique_config_ptr = unique_libgit_ptr<git_config>;
+    using unique_config_itr = unique_libgit_ptr<git_config_iterator>;
+    using unique_config_entry_ptr = unique_libgit_ptr<git_config_entry>;
 
     using unique_buf_ptr = std::unique_ptr<git_buf, std::function<void(git_buf *)>>;
     static std::function<void(git_buf *)> free_unique_buf = [](git_buf *buffer)

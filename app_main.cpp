@@ -1,4 +1,5 @@
 #include "app_main.hpp"
+#include "events/git_found_remote_event.hpp"
 #include "git/commands/find_branches.hpp"
 #include "git/commands/find_repos.hpp"
 #include "git/commands/revwalk.hpp"
@@ -22,6 +23,7 @@ namespace fons
         Bind(git::EVENT_FOUND_BRANCH, &git::git_mediator::on_branch_found, &(git_mediator.value()));
         Bind(git::EVENT_REVWALK, &git::git_mediator::on_commit_found, &(git_mediator.value()));
         Bind(git::EVENT_STATUS, &git::git_mediator::on_status, &(git_mediator.value()));
+        Bind(events::EVENT_GIT_FOUND_REMOTE, &git::git_mediator::on_remote_found, &(git_mediator.value()));
         Bind(events::EVENT_CMD_COMPLETE, &app_cmd_manager::on_cmd_complete, &cmd_manager);
 
         git_mediator->init();
