@@ -2,7 +2,7 @@
 
 #include <wx/event.h>
 
-#include "gui/fons_wx.h"
+#include "gui/fons_wx.hpp"
 
 namespace fons::events
 {

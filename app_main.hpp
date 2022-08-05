@@ -7,7 +7,7 @@
 #include "app_cmd_manager.hpp"
 #include "app_settings.hpp"
 #include "git/git_mediator.hpp"
-#include "gui/fons_wx.h"
+#include "gui/fons_wx.hpp"
 
 namespace fons
 {

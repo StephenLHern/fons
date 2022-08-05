@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gui/fons_wx.h"
+#include "gui/fons_wx.hpp"
 #include "settings_observer.hpp"
 
 namespace fons

@@ -3,7 +3,7 @@
 #include "common/cmd_observer.hpp"
 #include "git/git_observer.hpp"
 
-#include "gui/fons_wx.h"
+#include "gui/fons_wx.hpp"
 
 class wxTreeCtrl;
 

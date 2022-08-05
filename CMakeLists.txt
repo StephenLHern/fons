@@ -90,7 +90,6 @@ add_executable (Fons WIN32
 "gui/contexts/context_settings.cpp"
 "gui/ebt_window_control_button.cpp"
 "gui/everything_but_the_title_bar.cpp"
-"gui/fons_wx.h"
 "gui/frame_home.cpp"
 "gui/repo_selector.cpp"
 "gui/search_completer.cpp"
