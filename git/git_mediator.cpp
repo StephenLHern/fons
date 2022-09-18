@@ -4,6 +4,7 @@
 
 #include "events/git_found_remote_event.hpp"
 #include "git/commands/find_branches.hpp"
+#include "git/commands/find_pull_requests.hpp"
 #include "git/commands/find_remotes.hpp"
 #include "git/commands/find_repos.hpp"
 #include "git/commands/get_config.hpp"
@@ -74,6 +75,16 @@ namespace fons::git
     {
         for (git_observer *current_observer : observers)
             current_observer->on_remote_found(eventData.remote_name, eventData.remote_url);
+
+        auto find_pull_requests_for_remote = std::make_shared<fons::git::find_pull_requests>();
+        find_pull_requests_for_remote->remote_url = eventData.remote_url;
+        cmd_manager->execute(find_pull_requests_for_remote);
+    }
+
+    void fons::git::git_mediator::on_pull_request_found(pull_request_event &eventData)
+    {
+        for (git_observer *current_observer : observers)
+            current_observer->on_pull_request_found(eventData.title, eventData.url, eventData.user_login);
     }
 
     void git_mediator::on_status(wxCommandEvent &eventData)

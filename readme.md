@@ -20,6 +20,7 @@ Below is a roadmap for the planned scope of the project:
 * Application settings framework, example setting
 * Doxygen, Sphinx documentation
 * Unit test suite
+* Github API, Merge Request management
 
 ### To Do
 
@@ -73,8 +74,10 @@ Fons makes use of the following libaries, tools, and resources (listed alphabeti
 
 * [cereal](https://uscilab.github.io/cereal/)
 * [Cmake](https://cmake.org/)
+* [cpr](https://github.com/libcpr/cpr)
 * [Doxygen](https://doxygen.nl/)
 * [Github](https://github.com/)
+* [JSON for Modern C++ (nlohmann-json)](https://json.nlohmann.me/)
 * [libgit2](https://libgit2.org/)
 * [Octicons](https://github.com/primer/octicons)
 * [ReadTheDocs](https://readthedocs.org/)

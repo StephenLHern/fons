@@ -10,7 +10,6 @@ namespace fons::git
 {
     class revwalk_event;
     wxDECLARE_EVENT(EVENT_REVWALK, revwalk_event);
-    const int EVENT_FOUND_COMMIT = 0;
 
     class revwalk_event : public fons::events::cmd_event
     {

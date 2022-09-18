@@ -25,6 +25,7 @@ namespace fons
         class get_config;
         class revwalk;
         class revwalk_event;
+        class pull_request_event;
     } // namespace git
 } // namespace fons
 
@@ -46,6 +47,7 @@ namespace fons::git
         void on_status(wxCommandEvent &eventData);
         void on_commit_found(revwalk_event &eventData);
         void on_remote_found(events::git_found_remote_event &eventData);
+        void on_pull_request_found(pull_request_event &eventData);
         virtual void on_repo_select(std::string selected_repo) override;
         virtual void on_command_complete(uint64_t command_id) override;
 

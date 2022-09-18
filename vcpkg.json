@@ -17,6 +17,14 @@
     {
       "name": "gtest",
       "version>=": "1.11.0"
+    },
+    {
+      "name": "cpr",
+      "version>=": "1.7.2"
+    },
+    {
+      "name": "nlohmann-json",
+      "version>=": "3.10.5"
     }
   ],
   "builtin-baseline": "9e8da9bd8aa16fb268ac68f731c44fdef5fec1ab"

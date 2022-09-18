@@ -72,7 +72,8 @@ namespace fons
     template <class Archive>
     void app_settings::serialize(Archive &archive)
     {
-        archive(CEREAL_OPTIONAL_NVP(active_repo), CEREAL_OPTIONAL_NVP(repos), CEREAL_OPTIONAL_NVP(last_repo_scan_time));
+        archive(CEREAL_OPTIONAL_NVP(active_repo), CEREAL_OPTIONAL_NVP(repos), CEREAL_OPTIONAL_NVP(last_repo_scan_time),
+                CEREAL_OPTIONAL_NVP(github_access_token), CEREAL_OPTIONAL_NVP(github_token_type), CEREAL_OPTIONAL_NVP(github_token_scope));
     }
 
     void app_settings::load_settings()

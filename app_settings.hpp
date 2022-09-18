@@ -32,9 +32,15 @@ namespace fons
         void on_repo_select(wxCommandEvent &eventData);
         void on_repo_found(wxCommandEvent &eventData);
 
+        // Repo Settings
         std::string active_repo;
         std::set<std::string> repos;
         std::chrono::time_point<std::chrono::system_clock> last_repo_scan_time;
+
+        // GitHub API Settings
+        std::string github_access_token;
+        std::string github_token_type;
+        std::string github_token_scope;
 
         std::vector<settings_observer *> observers;
 

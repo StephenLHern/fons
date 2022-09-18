@@ -50,7 +50,7 @@ namespace fons::gui
         context_book->AddPage(
             new context_changes(context_book, parent_app->settings, parent_app->git_mediator.value(), parent_app->cmd_manager), "Changes");
         context_book->AddPage(new context_commit(context_book), "Commit");
-        context_book->AddPage(new context_merge(context_book), "Merge");
+        context_book->AddPage(new context_merge(context_book, parent_app->settings, parent_app->git_mediator.value()), "Merge");
         context_book->AddPage(new context_remote(context_book, parent_app->settings, parent_app->git_mediator.value()), "Remote");
         context_book->AddPage(
             new context_settings(context_book, parent_app->settings, parent_app->git_mediator.value(), parent_app->cmd_manager),
@@ -95,6 +95,12 @@ namespace fons::gui
         auto *frameSizer = new wxBoxSizer(wxOrientation::wxHORIZONTAL);
         frameSizer->Add(main_panel, wxSizerFlags(1).Expand());
         SetSizerAndFit(frameSizer);
+    }
+
+    void frame_home::on_user_code_generate(wxCommandEvent &event_data)
+    {
+        wxMessageBox(wxT("Visit https://github.com/login/device \r\n Enter User Code: " + event_data.GetString()), wxT("Device Activation"),
+                     wxICON_INFORMATION);
     }
 
     void frame_home::on_sidebar_select(wxCommandEvent &event_data)

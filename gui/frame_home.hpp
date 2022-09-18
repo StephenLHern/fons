@@ -15,6 +15,7 @@ namespace fons::gui
     {
       public:
         frame_home(wxApp *parent);
+        void on_user_code_generate(wxCommandEvent &event_data);
 
       private:
         app_main *parent_app;

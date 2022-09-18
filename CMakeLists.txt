@@ -22,6 +22,8 @@ find_package(wxWidgets REQUIRED COMPONENTS core base stc OPTIONAL_COMPONENTS net
 find_package(cereal REQUIRED)
 find_path(LIBGIT2_INCLUDE_DIR git2.h REQUIRED)
 find_library(LIBGIT2_LIBRARY git2 REQUIRED)
+find_package(cpr REQUIRED)
+find_package(nlohmann_json REQUIRED)
 
 ############################################################################################################################################
 # Copied Files Required at Fons Runtime
@@ -96,7 +98,9 @@ add_executable (Fons WIN32
 "gui/sidebar_button.cpp"
 "git/commands/head_to_workdir.cpp"
 "git/commands/find_remotes.cpp"
-"git/commands/get_config.cpp")
+"git/commands/get_config.cpp"
+"git/commands/find_pull_requests.cpp"
+)
 
 ############################################################################################################################################
 # Doxygen
@@ -118,6 +122,7 @@ set_target_properties(Fons PROPERTIES INTERFACE_SYSTEM_INCLUDE_DIRECTORIES $<TAR
 target_include_directories(Fons SYSTEM PRIVATE ${LIBGIT2_INCLUDE_DIR})
 target_include_directories(Fons SYSTEM PRIVATE ${wxWidgets_INCLUDE_DIRS})
 target_include_directories(Fons SYSTEM PRIVATE ${cereal_INCLUDE_DIRS})
+target_include_directories(Fons SYSTEM PRIVATE ${cpr_INCLUDE_DIRS})
 target_include_directories(Fons PRIVATE ".")
 
 ############################################################################################################################################
@@ -130,7 +135,7 @@ set(CMAKE_INCLUDE_SYSTEM_FLAG_CXX "/external:I ")
 string(REGEX REPLACE "/W[3|4]" "/Wall" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 	if( CMAKE_BUILD_TYPE STREQUAL "Debug")
 	target_compile_options(Fons PRIVATE /analyze:external- /permissive- /fsanitize=address /Wall /WX /wd4626 /wd4625 /wd4866 /wd4820 /wd5026
-        /wd5027 /wd4514 /wd5045 /wd5039 /wd4868 /experimental:external /external:W0)
+        /wd5027 /wd4514 /wd5045 /wd5039 /wd4868 /wd4355 /wd5204 /wd4355 /experimental:external /external:W0)
 	else()
 	target_compile_options(Fons PRIVATE)
 	endif()
@@ -140,12 +145,16 @@ endif()
 
 target_compile_definitions(Fons PRIVATE ${wxWidgets_DEFINITIONS} "$<$<CONFIG:DEBUG>:${wxWidgets_DEFINITIONS_DEBUG}>")
 
+add_compile_definitions(_DISABLE_VECTOR_ANNOTATION)
+
 ############################################################################################################################################
 # Linked Libraries
 ############################################################################################################################################
 
 target_link_libraries(Fons PRIVATE ${LIBGIT2_LIBRARY})
 target_link_libraries(Fons PRIVATE ${wxWidgets_LIBRARIES})
+target_link_libraries(Fons PRIVATE cpr::cpr)
+target_link_libraries(Fons PRIVATE nlohmann_json::nlohmann_json)
 
 ############################################################################################################################################
 # WxWidgets Resource Compiler

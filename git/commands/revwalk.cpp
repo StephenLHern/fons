@@ -39,7 +39,7 @@ namespace fons::git
             __time64_t timestamp = git_commit_time(commit.get());
 
             fons::git::commit commit_data(id, message, author_name, author_email, timestamp);
-            queue_event<revwalk_event>(EVENT_REVWALK, EVENT_FOUND_COMMIT, commit_data);
+            queue_event<revwalk_event>(EVENT_REVWALK, wxID_ANY, commit_data);
         }
 
         return;
