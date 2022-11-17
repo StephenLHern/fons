@@ -1,6 +1,8 @@
 #pragma once
-#include "common/command.hpp"
+#include <optional>
 #include <thread>
+
+#include "common/command.hpp"
 
 namespace fons
 {

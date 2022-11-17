@@ -1,0 +1,83 @@
+############################################################################################################################################
+# Fons CI Github action
+# Contains all CI jobs for all currently supported build environments of the fons project
+############################################################################################################################################
+name: Fons CI Build
+on: [push, workflow_dispatch]
+
+jobs:
+  job:
+    name: windows cmake ninja msvc build
+
+    runs-on: windows-latest
+
+    env:
+      VCPKG_DEFAULT_TRIPLET: x64-windows
+      BUILD_TYPE: Release
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Install doxygen
+        continue-on-error: true
+        uses: lyricwulf/abc@v1
+        with:
+          windows: ""
+          macos: doxygen
+          linux: doxygen
+
+      ######################################################################################################################################
+      # Currently, no choco package is available for doxygen, so it is maintained manually for builds on Windows OS
+      ######################################################################################################################################
+      - name: Install doxygen (Windows)
+        run: |
+          $url = "https://www.doxygen.nl/files/doxygen-1.9.6.windows.x64.bin.zip"
+          Start-DownloadWithRetry -Url $url -Name "doxygen.zip" -DownloadPath "C:\"
+          Extract-7Zip -Path  "C:\doxygen.zip" -DestinationPath "C:\windows\system32"
+          doxygen --version
+
+      - name: Install Sphinx
+        continue-on-error: true
+        uses: lyricwulf/abc@v1
+        with:
+          windows: sphinx
+          macos: sphinx-doc
+          linux: python3-sphinx
+
+      - name: Install Read the Docs Sphinx Theme
+        run: pip install sphinx_rtd_theme
+
+      - name: Install breathe
+        run: pip install breathe
+
+      - name: Install Ninja
+        continue-on-error: true
+        uses: lyricwulf/abc@v1
+        with:
+          windows: ninja
+          macos: ninja
+          linux: ninja
+
+      - name: Install CMake
+        continue-on-error: true
+        uses: lyricwulf/abc@v1
+        with:
+          windows: cmake
+          macos: cmake
+          linux: cmake
+
+      - name: Enable Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1.12.1
+
+      - name: Cmake Configure
+        run: cmake.exe -S . -B ${{github.workspace}}\build -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G Ninja -D CMAKE_MAKE_PROGRAM=ninja.exe -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl
+
+      - name: Cmake Build
+        run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}}
+
+      - name: Unit Tests
+        working-directory: ${{github.workspace}}\build\ut
+        run: ctest -C ${{env.BUILD_TYPE}}
