@@ -71,6 +71,7 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
+build/
 builds/
 [Bb]in/
 [Oo]bj/

@@ -14,6 +14,7 @@ jobs:
     env:
       VCPKG_DEFAULT_TRIPLET: x64-windows
       BUILD_TYPE: Release
+      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output for sonar static analysis will be placed
 
     steps:
       - name: Checkout Repository
@@ -81,3 +82,18 @@ jobs:
       - name: Unit Tests
         working-directory: ${{github.workspace}}\build\ut
         run: ctest -C ${{env.BUILD_TYPE}}
+
+      - name: Install sonar-scanner and build-wrapper
+        uses: SonarSource/sonarcloud-github-c-cpp@v1
+
+      - name: Run build-wrapper
+        run: |
+          cmake -S ${{github.workspace}} -B ${{github.workspace}}\build
+          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --clean-first
+
+      - name: Run sonar-scanner
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+        run: |
+          sonar-scanner -X --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
