@@ -33,23 +33,23 @@ namespace fons::git
 {
     wxDECLARE_EVENT(EVENT_INIT_REPO, wxCommandEvent);
 
-    class git_mediator : public wxEvtHandler, settings_observer, cmd_observer
+    class git_mediator : public wxEvtHandler, private settings_observer, private cmd_observer
     {
       public:
         git_mediator(fons::app_settings *bind_settings, fons::app_cmd_manager *bind_cmd_manager);
-        ~git_mediator();
+        ~git_mediator() override;
 
         void subscribe(git_observer *observer);
         void unsubscribe(git_observer *observer);
 
         void init();
-        void on_branch_found(wxCommandEvent &eventData);
-        void on_status(wxCommandEvent &eventData);
-        void on_commit_found(revwalk_event &eventData);
-        void on_remote_found(events::git_found_remote_event &eventData);
-        void on_pull_request_found(pull_request_event &eventData);
-        virtual void on_repo_select(std::string selected_repo) override;
-        virtual void on_command_complete(uint64_t command_id) override;
+        void on_branch_found(const wxCommandEvent &eventData);
+        void on_status(const wxCommandEvent &eventData);
+        void on_commit_found(const revwalk_event &eventData);
+        void on_remote_found(const events::git_found_remote_event &eventData);
+        void on_pull_request_found(const pull_request_event &eventData);
+        void on_repo_select(std::string_view selected_repo) override;
+        void on_command_complete(uint64_t command_id) override;
 
       private:
         fons::app_settings *settings;

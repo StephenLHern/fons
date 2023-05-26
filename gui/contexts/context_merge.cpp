@@ -19,11 +19,11 @@ namespace fons::gui
         pull_request_view->AppendTextColumn("URL");
         pull_request_view->AppendTextColumn("User");
 
-        wxBoxSizer *context_horizontal = new wxBoxSizer(wxOrientation::wxHORIZONTAL);
+        auto context_horizontal = new wxBoxSizer(wxOrientation::wxHORIZONTAL);
         context_horizontal->AddSpacer(5);
         context_horizontal->Add(pull_request_view, wxSizerFlags(1).Expand());
 
-        wxBoxSizer *context_vertical = new wxBoxSizer(wxOrientation::wxVERTICAL);
+        auto context_vertical = new wxBoxSizer(wxOrientation::wxVERTICAL);
         context_vertical->AddSpacer(5);
         context_vertical->Add(context_horizontal, wxSizerFlags(1).Expand());
 
@@ -36,17 +36,17 @@ namespace fons::gui
         subscribed_git->unsubscribe(this);
     }
 
-    void context_merge::on_repo_select(std::string found_repo)
+    void context_merge::on_repo_select([[maybe_unused]] std::string_view found_repo)
     {
         pull_request_view->DeleteAllItems();
     }
 
-    void context_merge::on_pull_request_found(std::string title, std::string url, std::string user_login)
+    void context_merge::on_pull_request_found(std::string_view title, std::string_view url, std::string_view user_login)
     {
         wxVector<wxVariant> remote_data;
-        remote_data.push_back(title);
-        remote_data.push_back(url);
-        remote_data.push_back(user_login);
+        remote_data.push_back(title.data());
+        remote_data.push_back(url.data());
+        remote_data.push_back(user_login.data());
         pull_request_view->AppendItem(remote_data);
     }
 } // namespace fons::gui

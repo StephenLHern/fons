@@ -15,6 +15,6 @@ namespace fons::git
     {
       public:
         status(){};
-        virtual void execute() override;
+        void execute() override;
     };
 } // namespace fons::git

@@ -33,11 +33,11 @@ namespace fons::gui
         wxTopLevelWindow *m_top_window;
         int m_state;
 
-        void on_mouse_enter(wxMouseEvent &evt);
-        void on_mouse_leave(wxMouseEvent &evt);
-        void on_mouse_left_down(wxMouseEvent &evt);
-        void on_mouse_left_up(wxMouseEvent &evt);
-        void on_size(wxSizeEvent &evt);
+        void on_mouse_enter(const wxMouseEvent &evt);
+        void on_mouse_leave(const wxMouseEvent &evt);
+        void on_mouse_left_down(const wxMouseEvent &evt);
+        void on_mouse_left_up(const wxMouseEvent &evt);
+        void on_size(const wxSizeEvent &evt);
         void load_image();
     };
 } // namespace fons::gui

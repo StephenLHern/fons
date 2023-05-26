@@ -22,12 +22,11 @@ namespace fons::git
             return;
 
         const char *branch_name{};
-        int git_result = git_branch_name(&branch_name, ref.get());
 
-        if (git_result != GIT_OK)
+        if (git_branch_name(&branch_name, ref.get()) != GIT_OK)
             return;
 
-        wxCommandEvent *status_event = new wxCommandEvent(EVENT_STATUS);
+        auto status_event = new wxCommandEvent(EVENT_STATUS);
         status_event->SetString(wxString(branch_name));
         wxQueueEvent(dynamic_cast<wxEvtHandler *>(app), status_event);
     }

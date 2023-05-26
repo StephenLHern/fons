@@ -23,8 +23,8 @@ namespace fons
     class app_main : public wxApp
     {
       public:
-        virtual bool OnInit() override;
-        virtual int OnExit() override;
+        bool OnInit() override;
+        int OnExit() override;
 
         void on_close(wxCloseEvent &event_data);
 

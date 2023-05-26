@@ -23,7 +23,7 @@ namespace fons::gui
 
         config_tree = new wxTreeCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, (wxBORDER_NONE | wxTR_HIDE_ROOT));
 
-        wxBoxSizer *tree_sizer = new wxBoxSizer(wxOrientation::wxVERTICAL);
+        auto tree_sizer = new wxBoxSizer(wxOrientation::wxVERTICAL);
         tree_sizer->Add(config_tree, wxSizerFlags(1).Expand());
         SetSizerAndFit(tree_sizer);
     }
@@ -77,7 +77,7 @@ namespace fons::gui
         Thaw();
     }
 
-    void context_settings::on_repo_select(std::string found_repo)
+    void context_settings::on_repo_select([[maybe_unused]] std::string_view found_repo)
     {
         last_get_config_cmd.reset();
         auto get_config_cmd = std::make_shared<fons::git::get_config>();

@@ -20,7 +20,7 @@
 namespace fons::gui
 {
     frame_home::frame_home(wxApp *parent)
-        : wxFrame(NULL, wxID_ANY, "Fons", wxDefaultPosition, wxDefaultSize, ((wxSYSTEM_MENU | wxRESIZE_BORDER | wxCLIP_CHILDREN)))
+        : wxFrame(nullptr, wxID_ANY, "Fons", wxDefaultPosition, wxDefaultSize, ((wxSYSTEM_MENU | wxRESIZE_BORDER | wxCLIP_CHILDREN)))
     {
         parent_app = dynamic_cast<app_main *>(parent);
 
@@ -97,13 +97,13 @@ namespace fons::gui
         SetSizerAndFit(frameSizer);
     }
 
-    void frame_home::on_user_code_generate(wxCommandEvent &event_data)
+    void frame_home::on_user_code_generate(const wxCommandEvent &event_data)
     {
         wxMessageBox(wxT("Visit https://github.com/login/device \r\n Enter User Code: " + event_data.GetString()), wxT("Device Activation"),
                      wxICON_INFORMATION);
     }
 
-    void frame_home::on_sidebar_select(wxCommandEvent &event_data)
+    void frame_home::on_sidebar_select(const wxCommandEvent &event_data)
     {
         if (!button_id_to_page_id.contains(event_data.GetId()))
             return;
@@ -112,7 +112,7 @@ namespace fons::gui
 
         for (std::pair<wxWindowID, size_t> element : button_id_to_page_id)
         {
-            sidebar_button *button = static_cast<sidebar_button *>(FindWindowById(element.first));
+            auto button = static_cast<sidebar_button *>(FindWindowById(element.first));
             if (event_data.GetId() == button->GetId())
             {
                 button->mark_active();
@@ -145,10 +145,10 @@ namespace fons::gui
                     RECT borderThickness;
                     SetRectEmpty(&borderThickness);
                     AdjustWindowRectEx(&borderThickness, static_cast<DWORD>(GetWindowLongPtr(GetHandle(), GWL_STYLE) & ~WS_CAPTION), FALSE,
-                                       NULL);
+                                       0);
                     borderThickness.left *= -1;
                     borderThickness.top *= -1;
-                    NCCALCSIZE_PARAMS *sz = reinterpret_cast<NCCALCSIZE_PARAMS *>(lParam);
+                    auto sz = std::bit_cast<NCCALCSIZE_PARAMS *>(lParam);
                     sz->rgrc[0].top += 1;
                     sz->rgrc[0].left += borderThickness.left;
                     sz->rgrc[0].right -= borderThickness.right;
@@ -160,15 +160,15 @@ namespace fons::gui
         }
         case WM_NCHITTEST:
         {
-            ebt_window_control_button *maximize = (ebt_window_control_button *)wxWindow::FindWindowById(wxID_MAXIMIZE_FRAME);
+            auto maximize = static_cast<ebt_window_control_button *>(wxWindow::FindWindowById(wxID_MAXIMIZE_FRAME));
             if (maximize && maximize->selected)
                 return HTMAXBUTTON;
 
-            ebt_window_control_button *close = (ebt_window_control_button *)wxWindow::FindWindowById(wxID_CLOSE_FRAME);
+            auto close = static_cast<ebt_window_control_button *>(wxWindow::FindWindowById(wxID_CLOSE_FRAME));
             if (close && close->selected)
                 return HTCLOSE;
 
-            ebt_window_control_button *minimize = (ebt_window_control_button *)wxWindow::FindWindowById(wxID_ICONIZE_FRAME);
+            auto minimize = static_cast<ebt_window_control_button *>(wxWindow::FindWindowById(wxID_ICONIZE_FRAME));
             if (minimize && minimize->selected)
                 return HTMINBUTTON;
 

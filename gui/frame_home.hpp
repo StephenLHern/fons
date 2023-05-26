@@ -15,12 +15,12 @@ namespace fons::gui
     {
       public:
         frame_home(wxApp *parent);
-        void on_user_code_generate(wxCommandEvent &event_data);
+        void on_user_code_generate(const wxCommandEvent &event_data);
 
       private:
         app_main *parent_app;
         wxSimplebook *context_book;
-        void on_sidebar_select(wxCommandEvent &event_data);
+        void on_sidebar_select(const wxCommandEvent &event_data);
         std::unordered_map<wxWindowID, size_t> button_id_to_page_id;
         WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
     };

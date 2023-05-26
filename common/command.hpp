@@ -34,16 +34,16 @@ namespace fons::common
     class command
     {
       public:
-        command() : status(cmd_status::queued), app(nullptr), app_settings(nullptr), app_cmd_manager(nullptr), instance_id(++static_id){};
+        command() = default;
 
-        command(cmd_observer *observer) : command()
+        explicit command(cmd_observer *observer) : command()
         {
             subscribe(observer);
         }
 
-        virtual ~command(){};
+        virtual ~command() = default;
 
-        std::atomic<cmd_status> status;
+        std::atomic<cmd_status> status = cmd_status::queued;
 
         uint64_t id()
         {
@@ -56,22 +56,22 @@ namespace fons::common
         template <class EventT, class... EventConstructorArgs>
         void queue_event(wxEventType event_id = events::EVENT_COMMAND, EventConstructorArgs &&...args)
         {
-            EventT *event_to_queue = new EventT(event_id, std::forward<EventConstructorArgs>(args)...);
+            auto event_to_queue = new EventT(event_id, std::forward<EventConstructorArgs>(args)...);
             event_to_queue->parent_cmd_id = id();
             wxQueueEvent(dynamic_cast<wxEvtHandler *>(app), event_to_queue);
         }
 
-        void virtual execute(){};
+        void virtual execute() = 0;
         void do_execute();
         void cancel();
 
       protected:
-        fons::app_main *app;
-        fons::app_settings *app_settings;
-        fons::app_cmd_manager *app_cmd_manager;
+        fons::app_main *app{};
+        fons::app_settings *app_settings{};
+        fons::app_cmd_manager *app_cmd_manager{};
         std::vector<cmd_observer *> observers;
         inline static uint64_t static_id = uint64_t{};
-        const uint64_t instance_id;
+        const uint64_t instance_id = ++static_id;
 
         friend class fons::app_cmd_manager;
     };

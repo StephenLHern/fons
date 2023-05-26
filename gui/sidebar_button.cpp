@@ -32,11 +32,11 @@ namespace fons::gui
         load_image();
         SetForegroundColour(*wxBLACK);
     }
-    void sidebar_button::on_mouse_enter([[maybe_unused]] wxMouseEvent &evt)
+    void sidebar_button::on_mouse_enter([[maybe_unused]] const wxMouseEvent &evt)
     {
         SetBackgroundColour(*wxWHITE);
     }
-    void sidebar_button::on_mouse_leave([[maybe_unused]] wxMouseEvent &evt)
+    void sidebar_button::on_mouse_leave([[maybe_unused]] const wxMouseEvent &evt)
     {
         SetBackgroundColour(wxColour(243, 243, 243));
     }

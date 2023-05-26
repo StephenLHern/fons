@@ -15,16 +15,18 @@ namespace fons
 
 namespace fons::gui
 {
-    class branch_selector : public wxComboBox, settings_observer, git::git_observer
+    class branch_selector : public wxComboBox, private settings_observer, private git::git_observer
     {
       public:
         branch_selector(wxWindow *parent, fons::app_settings &bound_settings, git::git_mediator &bound_git);
-        virtual ~branch_selector() override;
+        branch_selector(branch_selector &other) = delete;
+        branch_selector &operator=(const branch_selector &other) = delete;
+        ~branch_selector() override;
 
-        virtual void on_repo_select(std::string found_repo) override;
-        void on_branch_select(wxCommandEvent &event_data);
-        virtual void on_branch_found(std::string found_branch) override;
-        virtual void on_status_change(std::string active_branch) override;
+        void on_repo_select(std::string_view found_repo) override;
+        void on_branch_select(const wxCommandEvent &event_data);
+        void on_branch_found(std::string_view found_branch) override;
+        void on_status_change(std::string_view active_branch) override;
 
       private:
         wxArrayString branch_cache;

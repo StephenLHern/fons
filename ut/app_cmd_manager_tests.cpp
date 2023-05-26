@@ -9,7 +9,7 @@ namespace fons
 {
     class cmd_manager_test_fixture : public ::testing::Test
     {
-      protected:
+      public:
         fons::app_cmd_manager cmd_manager;
         fons::app_settings settings;
         fons::app_main app;

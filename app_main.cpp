@@ -16,7 +16,7 @@ namespace fons
         cmd_manager.init(this, &settings);
         git_mediator.emplace(&settings, &cmd_manager);
 
-        gui::frame_home *frame = new gui::frame_home(this);
+        auto *frame = new gui::frame_home(this);
         frame->Show(true);
 
         Bind(git::EVENT_FOUND_REPO, &app_settings::on_repo_found, &settings);

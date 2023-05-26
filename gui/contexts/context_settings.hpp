@@ -19,12 +19,12 @@ namespace fons
 
 namespace fons::gui
 {
-    class context_settings : public wxPanel, cmd_observer, git::git_observer, settings_observer
+    class context_settings : public wxPanel, private cmd_observer, private git::git_observer, private settings_observer
     {
       public:
         context_settings(wxWindow *parent, fons::app_settings &bound_settings, git::git_mediator &bound_git, app_cmd_manager &cmd_manager);
-        virtual void on_command_complete(uint64_t command_id) override;
-        virtual void on_repo_select(std::string found_repo) override;
+        void on_command_complete(uint64_t command_id) override;
+        void on_repo_select(std::string_view found_repo) override;
 
       private:
         std::shared_ptr<fons::git::get_config> last_get_config_cmd;

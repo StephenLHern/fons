@@ -50,7 +50,7 @@ namespace fons::git
         int expires_in = (*verification_codes_request_json)["expires_in"];
         int interval = (*verification_codes_request_json)["interval"];
 
-        wxCommandEvent *found_event = new wxCommandEvent(EVENT_USER_CODE_GENERATE);
+        auto found_event = new wxCommandEvent(EVENT_USER_CODE_GENERATE);
         found_event->SetString(wxString(user_code));
         wxQueueEvent(dynamic_cast<wxEvtHandler *>(app), found_event);
 
@@ -67,17 +67,14 @@ namespace fons::git
                                                            {"grant_type", "urn:ietf:params:oauth:grant-type:device_code"}};
             auto poll_access_token_request_json = http_post(access_token_url, access_token_headers, access_token_parameters);
 
-            if (poll_access_token_request_json.has_value())
+            if (poll_access_token_request_json.has_value() && !((*poll_access_token_request_json).contains("error") &&
+                                                                (*poll_access_token_request_json)["error"] == "authorization_pending"))
             {
-                if (!((*poll_access_token_request_json).contains("error") &&
-                      (*poll_access_token_request_json)["error"] == "authorization_pending"))
-                {
 
-                    access_token = (*poll_access_token_request_json)["access_token"];
-                    token_type = (*poll_access_token_request_json)["token_type"];
-                    scope = (*poll_access_token_request_json)["scope"];
-                    break;
-                }
+                access_token = (*poll_access_token_request_json)["access_token"];
+                token_type = (*poll_access_token_request_json)["token_type"];
+                scope = (*poll_access_token_request_json)["scope"];
+                break;
             }
 
             std::this_thread::sleep_for(std::chrono::seconds(interval));

@@ -15,7 +15,7 @@ namespace fons::git
     {
       public:
         find_repos(){};
-        virtual void execute() override;
+        void execute() override;
 
       private:
         void find_repo_folder(const std::filesystem::path &dir_path);

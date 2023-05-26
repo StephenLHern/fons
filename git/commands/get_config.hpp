@@ -13,7 +13,7 @@ namespace fons::git
     {
       public:
         get_config(){};
-        virtual void execute() override;
+        void execute() override;
         std::vector<config_entry> config_entries;
     };
 } // namespace fons::git

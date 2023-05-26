@@ -30,7 +30,7 @@ namespace fons
         uint64_t execute(std::shared_ptr<common::command> command);
         void cancel(uint64_t command_id);
         void process_cmds();
-        void on_cmd_complete(events::cmd_complete_event &eventData);
+        void on_cmd_complete(const events::cmd_complete_event &eventData);
 
       private:
         app_main *app;
@@ -38,7 +38,7 @@ namespace fons
 
         std::atomic<bool> shutdown_requested = false;
 
-        std::thread control_thread;
+        std::jthread control_thread;
         std::condition_variable cmd_processing_condition;
         std::mutex control_task_mutex;
 
@@ -47,6 +47,8 @@ namespace fons
 
         std::vector<cmd_instance> active_cmds;
         std::mutex active_cmds_mutex;
+
+        bool is_command_processing_needed();
 
         void cmd_processing_task();
         bool process_shutdown();

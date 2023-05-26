@@ -12,21 +12,25 @@ namespace cereal
     template <class T, class TV>
     void prologue(JSONInputArchive &, const OptionalNameValuePair<T, TV> &)
     {
+        // Prologue, epilogue functions required for cereal registration
     }
 
     template <class T, class TV>
     void epilogue(JSONInputArchive &, const OptionalNameValuePair<T, TV> &)
     {
+        // Prologue, epilogue functions required for cereal registration
     }
 
     template <class T, class TV>
     void prologue(JSONOutputArchive &, const OptionalNameValuePair<T, TV> &)
     {
+        // Prologue, epilogue functions required for cereal registration
     }
 
     template <class T, class TV>
     void epilogue(JSONOutputArchive &, const OptionalNameValuePair<T, TV> &)
     {
+        // Prologue, epilogue functions required for cereal registration
     }
 
     /// Loads optional nvp from JSONInputArchive if any. In case of exception sets fallback value
@@ -42,7 +46,7 @@ namespace cereal
         }
         catch (cereal::Exception &)
         {
-            if constexpr (!std::is_same<TV, void>::value)
+            if constexpr (!std::is_same_v<TV, void>)
             {
                 nvp.value = std::move(nvp.defaultValue);
             }

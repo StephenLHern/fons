@@ -17,16 +17,16 @@ namespace fons
 
 namespace fons::gui
 {
-    class context_merge : public wxPanel, settings_observer, git::git_observer
+    class context_merge : public wxPanel, private settings_observer, private git::git_observer
     {
       public:
         context_merge(wxWindow *parent, fons::app_settings &bound_settings, git::git_mediator &bound_git);
-        virtual ~context_merge() override;
+        ~context_merge() override;
 
       private:
         wxDataViewListCtrl *pull_request_view;
-        virtual void on_repo_select(std::string found_repo) override;
-        virtual void on_pull_request_found(std::string title, std::string url, std::string user_login) override;
+        void on_repo_select(std::string_view found_repo) override;
+        void on_pull_request_found(std::string_view title, std::string_view url, std::string_view user_login) override;
         app_settings *subscribed_settings;
         git::git_mediator *subscribed_git;
     };

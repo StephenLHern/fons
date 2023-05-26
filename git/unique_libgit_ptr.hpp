@@ -17,13 +17,10 @@ namespace fons::git
         unique_libgit_ptr(CreateMethodT creator, std::function<void __cdecl(T *)> free_method, CreateMethodArgs &&...args)
         {
             T *rawPtr{};
-            int createResult = creator(&rawPtr, std::forward<CreateMethodArgs>(args)...);
 
-            if (createResult != GIT_OK)
+            if (creator(&rawPtr, std::forward<CreateMethodArgs>(args)...) != GIT_OK)
             {
-                const git_error *error_details = git_error_last();
-
-                if (error_details)
+                if (const git_error *error_details = git_error_last(); error_details)
                     std::cout << error_details->klass << " :" << error_details->message << std::endl;
 
                 return;

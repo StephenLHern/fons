@@ -32,28 +32,28 @@ namespace fons::gui
         subscribed_git->unsubscribe(this);
     }
 
-    void branch_selector::on_repo_select(std::string selected_repo)
+    void branch_selector::on_repo_select([[maybe_unused]] std::string_view selected_repo)
     {
         Clear();
         branch_cache.clear();
         Enable(false);
     }
 
-    void branch_selector::on_branch_select([[maybe_unused]] wxCommandEvent &eventData)
+    void branch_selector::on_branch_select([[maybe_unused]] const wxCommandEvent &eventData)
     {
     }
 
-    void branch_selector::on_branch_found(std::string foundBranch)
+    void branch_selector::on_branch_found(std::string_view foundBranch)
     {
-        wxString found_branch = wxString(foundBranch);
+        auto found_branch = wxString(foundBranch.data());
         branch_cache.Add(found_branch);
-        Append(wxString(foundBranch));
+        Append(wxString(foundBranch.data()));
 
         if (branch_cache.Count() > 1)
             Enable(true);
     }
-    void branch_selector::on_status_change(std::string active_branch)
+    void branch_selector::on_status_change(std::string_view active_branch)
     {
-        SetValue(wxString(active_branch));
+        SetValue(wxString(active_branch.data()));
     }
 } // namespace fons::gui

@@ -26,19 +26,9 @@ jobs:
         continue-on-error: true
         uses: lyricwulf/abc@v1
         with:
-          windows: ""
+          windows: doxygen.portable
           macos: doxygen
           linux: doxygen
-
-      ######################################################################################################################################
-      # Currently, no choco package is available for doxygen, so it is maintained manually for builds on Windows OS
-      ######################################################################################################################################
-      - name: Install doxygen (Windows)
-        run: |
-          $url = "https://www.doxygen.nl/files/doxygen-1.9.6.windows.x64.bin.zip"
-          Start-DownloadWithRetry -Url $url -Name "doxygen.zip" -DownloadPath "C:\"
-          Extract-7Zip -Path  "C:\doxygen.zip" -DestinationPath "C:\windows\system32"
-          doxygen --version
 
       - name: Install Sphinx
         continue-on-error: true
@@ -84,7 +74,7 @@ jobs:
         run: ctest -C ${{env.BUILD_TYPE}}
 
       - name: Install sonar-scanner and build-wrapper
-        uses: SonarSource/sonarcloud-github-c-cpp@v1
+        uses: SonarSource/sonarcloud-github-c-cpp@v2
 
       - name: Run build-wrapper
         run: |

@@ -17,16 +17,18 @@ namespace fons
 
 namespace fons::gui
 {
-    class context_branches : public wxPanel, settings_observer, git::git_observer
+    class context_branches : public wxPanel, private settings_observer, private git::git_observer
     {
       public:
         context_branches(wxWindow *parent, fons::app_settings &bound_settings, git::git_mediator &bound_git);
-        virtual ~context_branches() override;
+        context_branches(context_branches &other) = delete;
+        context_branches &operator=(const context_branches &other) = delete;
+        ~context_branches() override;
 
       private:
         wxDataViewListCtrl *repo_branch_view;
-        virtual void on_repo_select(std::string found_repo) override;
-        virtual void on_branch_found(std::string found_commit) override;
+        void on_repo_select(std::string_view found_repo) override;
+        void on_branch_found(std::string_view found_commit) override;
         app_settings *subscribed_settings;
         git::git_mediator *subscribed_git;
     };

@@ -9,7 +9,8 @@ namespace fons::git
         {
         }
 
-        commit(std::string input_id, std::string input_message, std::string input_author_name, std::string input_author_email,
+        commit(std::string_view input_id, std::string_view input_message, std::string_view input_author_name,
+               std::string_view input_author_email,
                __time64_t input_time_stamp)
             : id(input_id), message(input_message), author_name(input_author_name), author_email(input_author_email),
               time_stamp(input_time_stamp)
@@ -17,12 +18,9 @@ namespace fons::git
         }
 
         commit(const commit &copy)
+            : id(copy.id), message(copy.message), author_name(copy.author_name), author_email(copy.author_email),
+              time_stamp(copy.time_stamp)
         {
-            id = copy.id;
-            message = copy.message;
-            author_name = copy.author_name;
-            author_email = copy.author_email;
-            time_stamp = copy.time_stamp;
         }
 
         std::string id;

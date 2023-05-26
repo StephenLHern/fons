@@ -15,8 +15,8 @@ namespace fons::git
         std::string new_file_path;
         std::string new_file_conent;
 
-        file_diff(std::string old_file_path_input, std::string old_file_content_input, std::string new_file_path_input,
-                  std::string new_file_conent_input)
+        file_diff(std::string_view old_file_path_input, std::string_view old_file_content_input, std::string_view new_file_path_input,
+                  std::string_view new_file_conent_input)
             : old_file_path(old_file_path_input), old_file_content(old_file_content_input), new_file_path(new_file_path_input),
               new_file_conent(new_file_conent_input){};
     };
@@ -25,7 +25,7 @@ namespace fons::git
     {
       public:
         head_to_workdir(){};
-        virtual void execute() override;
+        void execute() override;
         std::vector<file_diff> modified_file_list;
     };
 } // namespace fons::git

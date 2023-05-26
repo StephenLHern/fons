@@ -12,7 +12,7 @@ namespace fons
     {
         app = bind_app;
         settings = bind_settings;
-        control_thread = std::thread{&app_cmd_manager::cmd_processing_task, this};
+        control_thread = std::jthread{&app_cmd_manager::cmd_processing_task, this};
     }
 
     void app_cmd_manager::shutdown()
@@ -33,7 +33,7 @@ namespace fons
         cmd->app = app;
         cmd->app_settings = settings;
         cmd->app_cmd_manager = this;
-        cmd_queue.push_back(cmd_instance{cmd});
+        cmd_queue.emplace_back(cmd);
         process_cmds();
         return cmd->id();
     }
@@ -52,6 +52,8 @@ namespace fons
                  !matched_cmds.empty() && to_cancel != std::ranges::end(matched_cmds);)
             {
                 to_cancel->cmd->status = common::cmd_status::cancelled;
+
+                // Erase-remove idiom
                 cmd_queue.erase(std::remove(cmd_queue.begin(), cmd_queue.end(), *to_cancel), cmd_queue.end());
             }
         }
@@ -72,7 +74,7 @@ namespace fons
 
     void app_cmd_manager::cmd_processing_task()
     {
-        while (1)
+        while (true)
         {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Shutdown handling
@@ -87,17 +89,10 @@ namespace fons
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             // Determine if queue is empty and all active commands are currently executing
-            bool processing_wait = false;
+            if (is_command_processing_needed() && !shutdown_requested)
             {
-                std::scoped_lock lock(active_cmds_mutex, cmd_queue_mutex);
-                auto cmd_active = [](cmd_instance const &instance) { return instance.cmd->status == common::cmd_status::active; };
-                processing_wait = cmd_queue.empty() && std::all_of(active_cmds.begin(), active_cmds.end(), cmd_active);
-            }
-
-            if (processing_wait && !shutdown_requested)
-            {
-                std::unique_lock<std::mutex> lock{control_task_mutex};
-                cmd_processing_condition.wait(lock);
+                std::unique_lock lock{control_task_mutex};
+                cmd_processing_condition.wait(lock, [this] { return !is_command_processing_needed() || shutdown_requested; });
                 continue;
             }
 
@@ -123,7 +118,7 @@ namespace fons
 
                 if (cmd_queued)
                 {
-                    queue_front.thread = std::thread{&app_cmd_manager::cmd_task, this, queue_front.cmd->id()};
+                    queue_front.thread = std::jthread{&app_cmd_manager::cmd_task, this, queue_front.cmd->id()};
                     queue_front.cmd->status = common::cmd_status::active;
                     active_cmds.push_back(std::move(queue_front));
                 }
@@ -164,10 +159,17 @@ namespace fons
         return active_cmds.empty();
     }
 
-    void app_cmd_manager::on_cmd_complete(events::cmd_complete_event &eventData)
+    void app_cmd_manager::on_cmd_complete(const events::cmd_complete_event &eventData)
     {
         for (cmd_observer *current_observer : eventData.observers)
             current_observer->on_command_complete(eventData.parent_cmd_id);
+    }
+
+    bool fons::app_cmd_manager::is_command_processing_needed()
+    {
+        std::scoped_lock lock(active_cmds_mutex, cmd_queue_mutex);
+        auto cmd_active = [](cmd_instance const &instance) { return instance.cmd->status == common::cmd_status::active; };
+        return cmd_queue.empty() && std::ranges::all_of(active_cmds, cmd_active);
     }
 
     void app_cmd_manager::cmd_task(uint64_t cmd_id)
@@ -176,7 +178,7 @@ namespace fons
 
         std::unique_lock active_cmds_lock(active_cmds_mutex);
 
-        auto task_command = std::find_if(active_cmds.begin(), active_cmds.end(), match_id);
+        auto task_command = std::ranges::find_if(active_cmds, match_id);
 
         if (task_command == active_cmds.end())
             return;

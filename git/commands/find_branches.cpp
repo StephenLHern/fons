@@ -25,12 +25,11 @@ namespace fons::git
                 break;
 
             const char *branch_name{};
-            int git_result = git_branch_name(&branch_name, ref.get());
 
-            if (git_result != GIT_OK)
+            if (git_branch_name(&branch_name, ref.get()) != GIT_OK)
                 continue;
 
-            wxCommandEvent *found_event = new wxCommandEvent(EVENT_FOUND_BRANCH);
+            auto found_event = new wxCommandEvent(EVENT_FOUND_BRANCH);
             found_event->SetString(wxString(branch_name));
             wxQueueEvent(dynamic_cast<wxEvtHandler *>(app), found_event);
         }

@@ -17,11 +17,11 @@ namespace fons::gui
         repo_branch_view = new wxDataViewListCtrl(this, wxID_ANY);
         repo_branch_view->AppendTextColumn("Branch");
 
-        wxBoxSizer *context_horizontal = new wxBoxSizer(wxOrientation::wxHORIZONTAL);
+        auto context_horizontal = new wxBoxSizer(wxOrientation::wxHORIZONTAL);
         context_horizontal->AddSpacer(5);
         context_horizontal->Add(repo_branch_view, wxSizerFlags(1).Expand());
 
-        wxBoxSizer *context_vertical = new wxBoxSizer(wxOrientation::wxVERTICAL);
+        auto context_vertical = new wxBoxSizer(wxOrientation::wxVERTICAL);
         context_vertical->AddSpacer(5);
         context_vertical->Add(context_horizontal, wxSizerFlags(1).Expand());
 
@@ -34,15 +34,15 @@ namespace fons::gui
         subscribed_git->unsubscribe(this);
     }
 
-    void context_branches::on_repo_select(std::string found_repo)
+    void context_branches::on_repo_select([[maybe_unused]] std::string_view found_repo)
     {
         repo_branch_view->DeleteAllItems();
     }
 
-    void context_branches::on_branch_found(std::string found_branch)
+    void context_branches::on_branch_found(std::string_view found_branch)
     {
         wxVector<wxVariant> repo_branch_data;
-        repo_branch_data.push_back(wxVariant(found_branch));
+        repo_branch_data.push_back(wxVariant(found_branch.data()));
         repo_branch_view->AppendItem(repo_branch_data);
     }
 } // namespace fons::gui

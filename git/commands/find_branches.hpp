@@ -14,6 +14,6 @@ namespace fons::git
     {
       public:
         find_branches(){};
-        virtual void execute() override;
+        void execute() override;
     };
 } // namespace fons::git

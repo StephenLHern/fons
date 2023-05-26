@@ -10,6 +10,7 @@
 #include "git/commands/get_config.hpp"
 #include "git/commands/revwalk.hpp"
 #include "git/commands/status.hpp"
+#include "git/commit.hpp"
 
 namespace fons::git
 {
@@ -51,27 +52,25 @@ namespace fons::git
 
         if (!settings->active_repo.empty())
         {
-            wxCommandEvent *repo_select_event = new wxCommandEvent(EVENT_INIT_REPO);
+            auto repo_select_event = new wxCommandEvent(EVENT_INIT_REPO);
             repo_select_event->SetString(settings->active_repo);
             wxQueueEvent(dynamic_cast<wxEvtHandler *>(settings), repo_select_event);
         }
     }
 
-    void git_mediator::on_branch_found(wxCommandEvent &eventData)
+    void git_mediator::on_branch_found(const wxCommandEvent &eventData)
     {
-        std::string found_branch = std::string(eventData.GetString());
-
         for (git_observer *current_observer : observers)
-            current_observer->on_branch_found(found_branch);
+            current_observer->on_branch_found(std::string_view(eventData.GetString()));
     }
 
-    void git_mediator::on_commit_found(revwalk_event &eventData)
+    void git_mediator::on_commit_found(const revwalk_event &eventData)
     {
         for (git_observer *current_observer : observers)
             current_observer->on_commit_found(eventData.commit_data);
     }
 
-    void git_mediator::on_remote_found(events::git_found_remote_event &eventData)
+    void git_mediator::on_remote_found(const events::git_found_remote_event &eventData)
     {
         for (git_observer *current_observer : observers)
             current_observer->on_remote_found(eventData.remote_name, eventData.remote_url);
@@ -81,15 +80,15 @@ namespace fons::git
         cmd_manager->execute(find_pull_requests_for_remote);
     }
 
-    void fons::git::git_mediator::on_pull_request_found(pull_request_event &eventData)
+    void fons::git::git_mediator::on_pull_request_found(const pull_request_event &eventData)
     {
         for (git_observer *current_observer : observers)
             current_observer->on_pull_request_found(eventData.title, eventData.url, eventData.user_login);
     }
 
-    void git_mediator::on_status(wxCommandEvent &eventData)
+    void git_mediator::on_status(const wxCommandEvent &eventData)
     {
-        std::string active_branch = std::string(eventData.GetString());
+        auto active_branch = std::string(eventData.GetString());
 
         if (cached_active_branch == active_branch)
             return;
@@ -104,7 +103,7 @@ namespace fons::git
         last_revwalk_cmd = revwalk;
     }
 
-    void fons::git::git_mediator::on_repo_select(std::string selected_repo)
+    void fons::git::git_mediator::on_repo_select([[maybe_unused]] std::string_view selected_repo)
     {
         cached_active_branch.clear();
 
@@ -112,14 +111,12 @@ namespace fons::git
         // A new repository has been selected, so cancel any executing commands operating on the previous repository
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        std::shared_ptr<fons::git::find_branches> lapsed_branch_cmd = last_find_branches_cmd.lock();
-        if (lapsed_branch_cmd)
+        if (std::shared_ptr<fons::git::find_branches> lapsed_branch_cmd = last_find_branches_cmd.lock(); lapsed_branch_cmd)
         {
             lapsed_branch_cmd->cancel();
         }
 
-        std::shared_ptr<fons::git::find_remotes> lapsed_remotes_cmd = last_find_remotes_cmd.lock();
-        if (lapsed_remotes_cmd)
+        if (std::shared_ptr<fons::git::find_remotes> lapsed_remotes_cmd = last_find_remotes_cmd.lock(); lapsed_remotes_cmd)
         {
             lapsed_remotes_cmd->cancel();
         }

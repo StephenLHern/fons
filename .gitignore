@@ -445,3 +445,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# SonareLint
+/.sonarlint

@@ -6,17 +6,16 @@
 
 #include "app_settings.hpp"
 #include "context_repo.hpp"
+#include "git/commit.hpp"
 #include "git/git_mediator.hpp"
 
 namespace fons::gui
 {
-    context_repo::context_repo(wxWindow *parent, fons::app_settings &bound_settings, git::git_mediator &bound_git) : wxPanel(parent)
+    context_repo::context_repo(wxWindow *parent, fons::app_settings &bound_settings, git::git_mediator &bound_git)
+        : wxPanel(parent), subscribed_settings(&bound_settings), subscribed_git(&bound_git)
     {
         bound_settings.subscribe(this);
-        subscribed_settings = &bound_settings;
-
         bound_git.subscribe(this);
-        subscribed_git = &bound_git;
 
         repo_commit_view = new wxDataViewListCtrl(this, wxID_ANY);
         repo_commit_view->AppendTextColumn("Commit");
@@ -24,11 +23,11 @@ namespace fons::gui
         repo_commit_view->AppendTextColumn("Time");
         repo_commit_view->AppendTextColumn("Message");
 
-        wxBoxSizer *context_horizontal = new wxBoxSizer(wxOrientation::wxHORIZONTAL);
+        auto context_horizontal = new wxBoxSizer(wxOrientation::wxHORIZONTAL);
         context_horizontal->AddSpacer(5);
         context_horizontal->Add(repo_commit_view, wxSizerFlags(1).Expand());
 
-        wxBoxSizer *context_vertical = new wxBoxSizer(wxOrientation::wxVERTICAL);
+        auto context_vertical = new wxBoxSizer(wxOrientation::wxVERTICAL);
         context_vertical->AddSpacer(5);
         context_vertical->Add(context_horizontal, wxSizerFlags(1).Expand());
 
@@ -41,12 +40,12 @@ namespace fons::gui
         subscribed_git->unsubscribe(this);
     }
 
-    void context_repo::on_repo_select(std::string found_repo)
+    void context_repo::on_repo_select([[maybe_unused]] std::string_view found_repo)
     {
         repo_commit_view->DeleteAllItems();
     }
 
-    void context_repo::on_commit_found(fons::git::commit found_commit)
+    void context_repo::on_commit_found(const fons::git::commit &found_commit)
     {
         wxVector<wxVariant> repo_commit_data;
         repo_commit_data.push_back(found_commit.id);

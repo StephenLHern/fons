@@ -14,8 +14,8 @@ namespace fons::gui
         void mark_inactive();
 
       private:
-        void on_mouse_enter(wxMouseEvent &evt);
-        void on_mouse_leave(wxMouseEvent &evt);
+        void on_mouse_enter(const wxMouseEvent &evt);
+        void on_mouse_leave(const wxMouseEvent &evt);
         void load_image();
         wxString loaded_image;
     };

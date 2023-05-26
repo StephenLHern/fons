@@ -16,7 +16,6 @@ namespace fons::gui
         Bind(wxEVT_MOUSE_CAPTURE_LOST, &everything_but_the_title_bar::on_mouse_capture_lost, this);
         Bind(wxEVT_SIZE, &everything_but_the_title_bar::on_size, this);
 
-        m_parent = parent;
         m_dragging = false;
         m_drag_window = GetParent()->GetParent();
 
@@ -70,12 +69,12 @@ namespace fons::gui
         SetBackgroundColour(wxColour(240, 80, 51));
     }
 
-    void everything_but_the_title_bar::on_size([[maybe_unused]] wxSizeEvent &event)
+    void everything_but_the_title_bar::on_size([[maybe_unused]] const wxSizeEvent &event)
     {
         Layout();
     }
 
-    void everything_but_the_title_bar::on_mouse_left_down(wxMouseEvent &event)
+    void everything_but_the_title_bar::on_mouse_left_down(const wxMouseEvent &event)
     {
         if (!m_dragging)
         {
@@ -90,12 +89,12 @@ namespace fons::gui
         }
     }
 
-    void everything_but_the_title_bar::on_mouse_left_up([[maybe_unused]] wxMouseEvent &event)
+    void everything_but_the_title_bar::on_mouse_left_up([[maybe_unused]] const wxMouseEvent &event)
     {
         finish_drag();
     }
 
-    void everything_but_the_title_bar::on_mouse_motion([[maybe_unused]] wxMouseEvent &event)
+    void everything_but_the_title_bar::on_mouse_motion([[maybe_unused]] const wxMouseEvent &event)
     {
         wxPoint curClientPsn = event.GetPosition();
         wxPoint curScreenPsn = ClientToScreen(curClientPsn);
@@ -104,7 +103,7 @@ namespace fons::gui
         m_drag_window->SetPosition(m_dragStartWindow + movementVector);
     }
 
-    void everything_but_the_title_bar::on_mouse_capture_lost([[maybe_unused]] wxMouseCaptureLostEvent &event)
+    void everything_but_the_title_bar::on_mouse_capture_lost([[maybe_unused]] const wxMouseCaptureLostEvent &event)
     {
         finish_drag();
     }

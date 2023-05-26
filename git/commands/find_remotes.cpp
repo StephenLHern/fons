@@ -20,9 +20,8 @@ namespace fons::git
             return;
 
         unique_str_array_ptr remotes(new git_strarray(), free_unique_str_array);
-        int git_result = git_remote_list(remotes.get(), repo.get());
 
-        if (git_result != GIT_OK && status != common::cmd_status::cancelled)
+        if (git_remote_list(remotes.get(), repo.get()) != GIT_OK && status != common::cmd_status::cancelled)
             return;
 
         for (size_t current_index = 0; current_index < remotes.get()->count && status != common::cmd_status::cancelled; ++current_index)

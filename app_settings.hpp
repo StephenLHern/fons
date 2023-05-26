@@ -24,13 +24,13 @@ namespace fons
     {
       public:
         app_settings();
-        ~app_settings();
+        ~app_settings() override;
 
         void subscribe(settings_observer *observer);
         void unsubscribe(settings_observer *observer);
 
-        void on_repo_select(wxCommandEvent &eventData);
-        void on_repo_found(wxCommandEvent &eventData);
+        void on_repo_select(const wxCommandEvent &eventData);
+        void on_repo_found(const wxCommandEvent &eventData);
 
         // Repo Settings
         std::string active_repo;
@@ -51,7 +51,7 @@ namespace fons
 
       private:
         void load_settings();
-        void save_settings();
+        void save_settings() noexcept;
         void verify_settings();
     };
 } // namespace fons

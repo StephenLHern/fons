@@ -8,6 +8,6 @@ namespace fons::git
     {
       public:
         find_remotes(){};
-        virtual void execute() override;
+        void execute() override;
     };
 } // namespace fons::git

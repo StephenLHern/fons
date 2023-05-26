@@ -20,7 +20,7 @@ namespace fons::gui
         bound_git.subscribe(this);
         subscribed_git = &bound_git;
 
-        wxBoxSizer *file_list_sizer = new wxBoxSizer(wxOrientation::wxVERTICAL);
+        auto file_list_sizer = new wxBoxSizer(wxOrientation::wxVERTICAL);
 
         SetSizerAndFit(file_list_sizer);
     }
@@ -90,7 +90,7 @@ namespace fons::gui
         Thaw();
     }
 
-    void context_changes::on_repo_select(std::string found_repo)
+    void context_changes::on_repo_select([[maybe_unused]] std::string_view found_repo)
     {
         last_head_to_workdir_cmd.reset();
         auto head_to_workdir_cmd = std::make_shared<fons::git::head_to_workdir>();

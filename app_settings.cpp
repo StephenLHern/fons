@@ -33,17 +33,18 @@ namespace fons
 
     void app_settings::unsubscribe(settings_observer *observer)
     {
-        observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
+        // Erase-remove idiom
+        observers.erase(std::begin(std::ranges::remove(observers, observer)), observers.end());
     }
 
-    void app_settings::on_repo_select(wxCommandEvent &eventData)
+    void app_settings::on_repo_select(const wxCommandEvent &eventData)
     {
         // When event has been sent from a combo box, filter to the correct path format and only trigger an event if the user has selected a
         // different repo than was previously active
         if (eventData.GetEventType() == wxEVT_COMBOBOX)
         {
-            std::string stl_string = std::string(eventData.GetString());
-            std::replace(stl_string.begin(), stl_string.end(), '/', '\\');
+            auto stl_string = std::string(eventData.GetString());
+            std::ranges::replace(stl_string, '/', '\\');
             stl_string += ".git";
 
             if (!repos.contains(stl_string) || stl_string == active_repo)
@@ -56,9 +57,9 @@ namespace fons
             current_observer->on_repo_select(active_repo);
     }
 
-    void app_settings::on_repo_found(wxCommandEvent &eventData)
+    void app_settings::on_repo_found(const wxCommandEvent &eventData)
     {
-        std::string found_repo = std::string(eventData.GetString());
+       auto found_repo = std::string(eventData.GetString());
 
         if (repos.contains(found_repo))
             return;
@@ -87,7 +88,7 @@ namespace fons
         }
     }
 
-    void app_settings::save_settings()
+    void app_settings::save_settings() noexcept
     {
         std::ofstream settings_file;
         settings_file.open("settings.json");

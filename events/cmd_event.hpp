@@ -12,19 +12,18 @@ namespace fons::events
     class cmd_event : public wxCommandEvent
     {
       public:
-        cmd_event(wxEventType commandType = EVENT_COMMAND, int id = 0, uint64_t input_parent_cmd_id = 0) : wxCommandEvent(commandType, id)
+        cmd_event(wxEventType commandType = EVENT_COMMAND, int id = 0, uint64_t input_parent_cmd_id = 0)
+            : wxCommandEvent(commandType, id), parent_cmd_id(input_parent_cmd_id)
         {
-            parent_cmd_id = input_parent_cmd_id;
         }
 
         // You *must* copy here the data to be transported
-        cmd_event(const cmd_event &event) : wxCommandEvent(event)
+        cmd_event(const cmd_event &event) : wxCommandEvent(event), parent_cmd_id(event.parent_cmd_id)
         {
-            parent_cmd_id = event.parent_cmd_id;
         }
 
         // Required for sending with wxPostEvent()
-        virtual wxEvent *Clone() const
+        wxEvent *Clone() const override
         {
             return new cmd_event(*this);
         }

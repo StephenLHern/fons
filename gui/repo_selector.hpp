@@ -10,12 +10,14 @@ namespace fons
 
 namespace fons::gui
 {
-    class repo_selector : public wxComboBox, settings_observer
+    class repo_selector : public wxComboBox, private settings_observer
     {
       public:
         repo_selector(wxWindow *parent, fons::app_settings &settings);
-        virtual ~repo_selector() override;
-        virtual void on_repo_found(std::string found_repo) override;
+        repo_selector(repo_selector& other) = delete;
+        repo_selector &operator=(const repo_selector &other) = delete;
+        ~repo_selector() override;
+        void on_repo_found(std::string_view found_repo) override;
 
       private:
         wxArrayString repo_cache;

@@ -14,7 +14,7 @@ namespace fons::gui
     {
         for (std::string repo : settings.repos)
         {
-            std::replace(repo.begin(), repo.end(), '\\', '/');
+            std::ranges::replace(repo, '\\', '/');
             if (repo.length() > 4)
                 repo.erase(repo.end() - 4, repo.end());
             repo_cache.Add(wxString(repo));
@@ -25,7 +25,7 @@ namespace fons::gui
         if (!settings.active_repo.empty() && settings.active_repo.length() > 4)
         {
             std::string to_select = settings.active_repo;
-            std::replace(to_select.begin(), to_select.end(), '\\', '/');
+            std::ranges::replace(to_select, '\\', '/');
             to_select.erase(to_select.end() - 4, to_select.end());
             SetValue(wxString(to_select));
         }
@@ -40,9 +40,9 @@ namespace fons::gui
         subscribed_settings->unsubscribe(this);
     }
 
-    void repo_selector::on_repo_found(std::string found_repo)
+    void repo_selector::on_repo_found(std::string_view found_repo)
     {
-        wxString wxfound_repo = wxString(found_repo);
+        auto wxfound_repo = wxString(found_repo.data());
         Append(wxfound_repo);
         repo_cache.Add(wxfound_repo);
     }

@@ -25,9 +25,7 @@ namespace fons::git
         git_config_entry *entry{};
         while (status != common::cmd_status::cancelled)
         {
-            int iterate_result = git_config_next(&entry, config_iterator.get());
-
-            if (iterate_result == GIT_ITEROVER)
+            if (git_config_next(&entry, config_iterator.get()) == GIT_ITEROVER)
                 break;
 
             config_entries.push_back(config_entry(entry->include_depth, entry->level, entry->name, entry->value));

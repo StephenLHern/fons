@@ -14,18 +14,16 @@ namespace fons::events
     {
       public:
         cmd_complete_event(wxEventType eventType = EVENT_CMD_COMPLETE, int event_id = 0,
-                           std::vector<cmd_observer *> input_observers = std::vector<cmd_observer *>())
-            : cmd_event(eventType, event_id)
+                           const std::vector<cmd_observer *> & input_observers = std::vector<cmd_observer *>())
+            : cmd_event(eventType, event_id), observers(input_observers)
         {
-            observers = input_observers;
         }
 
-        cmd_complete_event(const cmd_complete_event &event) : cmd_event(event)
+        cmd_complete_event(const cmd_complete_event &event) : cmd_event(event), observers(std::vector<cmd_observer *>(event.observers))
         {
-            observers = std::vector<cmd_observer *>(event.observers);
         }
 
-        wxEvent *Clone() const
+        wxEvent *Clone() const override
         {
             return new cmd_complete_event(*this);
         }

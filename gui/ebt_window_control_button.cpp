@@ -118,26 +118,26 @@ namespace fons::gui
         SetBitmapSelected(button_image);
     }
 
-    void ebt_window_control_button::on_mouse_enter([[maybe_unused]] wxMouseEvent &evt)
+    void ebt_window_control_button::on_mouse_enter([[maybe_unused]] const wxMouseEvent &evt)
     {
         selected = true;
         m_state = 1;
         SetBackgroundColour((m_buttonType == button_type::Close) ? wxColour(232, 17, 35) : wxColour(238, 59, 27));
         load_image();
     }
-    void ebt_window_control_button::on_mouse_leave([[maybe_unused]] wxMouseEvent &evt)
+    void ebt_window_control_button::on_mouse_leave([[maybe_unused]] const wxMouseEvent &evt)
     {
         selected = false;
         m_state = 1;
         SetBackgroundColour(wxColour(240, 80, 51));
         load_image();
     }
-    void ebt_window_control_button::on_mouse_left_down([[maybe_unused]] wxMouseEvent &evt)
+    void ebt_window_control_button::on_mouse_left_down([[maybe_unused]] const wxMouseEvent &evt)
     {
         m_state = 2;
         load_image();
     }
-    void ebt_window_control_button::on_mouse_left_up([[maybe_unused]] wxMouseEvent &evt)
+    void ebt_window_control_button::on_mouse_left_up([[maybe_unused]] const wxMouseEvent &evt)
     {
         m_state = 1;
         load_image();
@@ -170,7 +170,7 @@ namespace fons::gui
         }
         }
     }
-    void ebt_window_control_button::on_size([[maybe_unused]] wxSizeEvent &evt)
+    void ebt_window_control_button::on_size([[maybe_unused]] const wxSizeEvent &evt)
     {
         load_image();
     }

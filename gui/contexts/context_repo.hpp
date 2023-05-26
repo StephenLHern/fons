@@ -17,15 +17,15 @@ namespace fons
 
 namespace fons::gui
 {
-    class context_repo : public wxPanel, settings_observer, git::git_observer
+    class context_repo : public wxPanel, private settings_observer, private git::git_observer
     {
       public:
         context_repo(wxWindow *parent, fons::app_settings &bound_settings, git::git_mediator &bound_git);
-        virtual ~context_repo() override;
+        ~context_repo() override;
 
       private:
-        virtual void on_repo_select(std::string found_repo) override;
-        virtual void on_commit_found(fons::git::commit found_commit) override;
+        void on_repo_select(std::string_view found_repo) override;
+        void on_commit_found(const fons::git::commit &found_commit) override;
         wxDataViewListCtrl *repo_commit_view;
         app_settings *subscribed_settings;
         git::git_mediator *subscribed_git;

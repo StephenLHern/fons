@@ -10,7 +10,7 @@ namespace fons::gui
     {
       public:
         search_completer(wxArrayString searchValues);
-        virtual void GetCompletions(const wxString &prefix, wxArrayString &res) override;
+        void GetCompletions(const wxString &prefix, wxArrayString &res) override;
 
       private:
         wxArrayString search_cache;

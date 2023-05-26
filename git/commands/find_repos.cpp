@@ -33,12 +33,11 @@ namespace fons::git
             if (dir->path().filename() == ".git")
             {
                 gitlib_manager gitlib;
-                unique_repo_ptr repo(git_repository_open, git_repository_free, dir->path().string().c_str());
-
-                if (!repo)
+                
+                if (unique_repo_ptr repo(git_repository_open, git_repository_free, dir->path().string().c_str()); !repo)
                     continue;
 
-                wxCommandEvent *found_event = new wxCommandEvent(EVENT_FOUND_REPO);
+                auto found_event = new wxCommandEvent(EVENT_FOUND_REPO);
                 found_event->SetString(dir->path().string());
                 wxQueueEvent(dynamic_cast<wxEvtHandler *>(app), found_event);
             }

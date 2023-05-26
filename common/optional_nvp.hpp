@@ -16,9 +16,9 @@ namespace cereal
     struct OptionalNameValuePair
     {
         // same as the cereal::NameValuePair::Type cause it's private
-        using Type = typename std::conditional<
-            std::is_array<typename std::remove_reference<T>::type>::value, typename std::remove_cv<T>::type,
-            typename std::conditional<std::is_lvalue_reference<T>::value, T, typename std::decay<T>::type>::type>::type;
+        using Type =
+            typename std::conditional_t<std::is_array_v<typename std::remove_reference_t<T>>, typename std::remove_cv_t<T>,
+                                        typename std::conditional_t<std::is_lvalue_reference_v<T>, T, typename std::decay_t<T>>>;
 
         // source property
         Type value;
@@ -30,7 +30,7 @@ namespace cereal
         const char *name;
 
         OptionalNameValuePair(const char *name, T &&value, TV &&defaultValue)
-            : name(name), value(std::forward<T>(value)), defaultValue(std::forward<TV>(defaultValue))
+            : name(name), value(std::move<T>(value)), defaultValue(std::move<TV>(defaultValue))
         {
         }
 
@@ -38,16 +38,16 @@ namespace cereal
         OptionalNameValuePair(const OptionalNameValuePair &) = delete;
 
         /// And enable move constructor by default
-        OptionalNameValuePair(OptionalNameValuePair &&) = default;
+        OptionalNameValuePair(OptionalNameValuePair &&) noexcept = default;
     };
 
     template <class T>
     struct OptionalNameValuePair<T, void>
     {
         // same as the cereal::NameValuePair::Type cause it's private
-        using Type = typename std::conditional<
-            std::is_array<typename std::remove_reference<T>::type>::value, typename std::remove_cv<T>::type,
-            typename std::conditional<std::is_lvalue_reference<T>::value, T, typename std::decay<T>::type>::type>::type;
+        using Type =
+            typename std::conditional_t<std::is_array_v<typename std::remove_reference_t<T>>, typename std::remove_cv_t<T>,
+                                        typename std::conditional_t<std::is_lvalue_reference_v<T>, T, typename std::decay_t<T>>>;
 
         // source property
         Type value;
@@ -55,7 +55,7 @@ namespace cereal
         // property name
         const char *name;
 
-        OptionalNameValuePair(const char *name, T &&value) : value(std::forward<T>(value)), name(name)
+        OptionalNameValuePair(const char *name, T &&value) : value(value), name(name)
         {
         }
 
@@ -63,7 +63,7 @@ namespace cereal
         OptionalNameValuePair(const OptionalNameValuePair &) = delete;
 
         /// And enable move constructor by default
-        OptionalNameValuePair(OptionalNameValuePair &&) = default;
+        OptionalNameValuePair(OptionalNameValuePair &&) noexcept = default;
     };
 
     /// Makes optional name-value pair

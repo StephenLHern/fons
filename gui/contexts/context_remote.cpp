@@ -18,11 +18,11 @@ namespace fons::gui
         repo_remote_view->AppendTextColumn("Remote");
         repo_remote_view->AppendTextColumn("Address");
 
-        wxBoxSizer *context_horizontal = new wxBoxSizer(wxOrientation::wxHORIZONTAL);
+        auto context_horizontal = new wxBoxSizer(wxOrientation::wxHORIZONTAL);
         context_horizontal->AddSpacer(5);
         context_horizontal->Add(repo_remote_view, wxSizerFlags(1).Expand());
 
-        wxBoxSizer *context_vertical = new wxBoxSizer(wxOrientation::wxVERTICAL);
+        auto context_vertical = new wxBoxSizer(wxOrientation::wxVERTICAL);
         context_vertical->AddSpacer(5);
         context_vertical->Add(context_horizontal, wxSizerFlags(1).Expand());
 
@@ -35,16 +35,16 @@ namespace fons::gui
         subscribed_git->unsubscribe(this);
     }
 
-    void context_remote::on_repo_select(std::string found_repo)
+    void context_remote::on_repo_select([[maybe_unused]] std::string_view found_repo)
     {
         repo_remote_view->DeleteAllItems();
     }
 
-    void context_remote::on_remote_found(std::string found_repo_name, std::string found_repo_url)
+    void context_remote::on_remote_found(std::string_view found_repo_name, std::string_view found_repo_url)
     {
         wxVector<wxVariant> remote_data;
-        remote_data.push_back(found_repo_name);
-        remote_data.push_back(found_repo_url);
+        remote_data.push_back(found_repo_name.data());
+        remote_data.push_back(found_repo_url.data());
         repo_remote_view->AppendItem(remote_data);
     }
 } // namespace fons::gui
