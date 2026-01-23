@@ -92,6 +92,7 @@ add_executable (Fons WIN32
 "gui/contexts/context_remote.cpp"
 "gui/contexts/context_repo.cpp"
 "gui/contexts/context_settings.cpp"
+        "gui/diff_control.cpp"
 "gui/ebt_window_control_button.cpp"
 "gui/everything_but_the_title_bar.cpp"
 "gui/frame_home.cpp"
