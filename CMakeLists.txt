@@ -1,4 +1,4 @@
-﻿############################################################################################################################################
+############################################################################################################################################
 # Fons Application Cmake
 ############################################################################################################################################
 
@@ -43,6 +43,16 @@ configure_file("gui/images/git-pull-request-24.png" "images/git-pull-request-24.
 configure_file("gui/images/workflow-24.png" "images/workflow-24.png" COPYONLY)
 configure_file("gui/images/gear-24.png" "images/gear-24.png" COPYONLY)
 configure_file("gui/images/info-24.png" "images/info-24.png" COPYONLY)
+
+# Diff Algorithm Icons
+configure_file("gui/images/diff-meyers-24.png" "images/diff-meyers-24.png" COPYONLY)
+configure_file("gui/images/diff-bentley-24.png" "images/diff-bentley-24.png" COPYONLY)
+configure_file("gui/images/diff-xdelta-24.png" "images/diff-xdelta-24.png" COPYONLY)
+configure_file("gui/images/diff-bsdiff-24.png" "images/diff-bsdiff-24.png" COPYONLY)
+
+# File/Folder Action Icons
+configure_file("gui/images/folder-24.png" "images/folder-24.png" COPYONLY)
+configure_file("gui/images/file-24.png" "images/file-24.png" COPYONLY)
 
 # Sidebar Buttons (Active)
 configure_file("gui/images/repo-24-active.png" "images/repo-24-active.png" COPYONLY)
@@ -90,10 +100,10 @@ add_executable (Fons WIN32
 "gui/contexts/context_info.cpp"
 "gui/contexts/context_merge.cpp"
 "gui/contexts/context_remote.cpp"
-"gui/contexts/context_repo.cpp"
-"gui/contexts/context_settings.cpp"
+        "gui/contexts/context_repo.cpp"
+        "gui/contexts/context_settings.cpp"
         "gui/diff_control.cpp"
-"gui/ebt_window_control_button.cpp"
+        "gui/ebt_window_control_button.cpp"
 "gui/everything_but_the_title_bar.cpp"
 "gui/frame_home.cpp"
 "gui/repo_selector.cpp"
@@ -103,6 +113,7 @@ add_executable (Fons WIN32
 "git/commands/find_remotes.cpp"
 "git/commands/get_config.cpp"
 "git/commands/find_pull_requests.cpp"
+"git/utils/repo_name_extractor.cpp"
 )
 
 ############################################################################################################################################
